@@ -1,15 +1,21 @@
 CC = gcc
-CFLAGS = -std=c99 -g -Wall
+AS = as
+ASFLAGS = --warn
+CFLAGS = -std=c99 -g -Wall -Wpedantic
 BIN = test
 QHASM = /home/thom/git/bachelor-thesis/code/qhasm/qhasm-arm
 
+.PRECIOUS: %.s
 %.s: %.q
 	$(QHASM) < $^ > $@
 
 %.o: %.c
 	$(CC) -c $(CFLAGS) $^ -o $@
 
-test: test.o proestasm.s proest128.o
+%.a: %.s
+	$(AS) $(ASFLAGS) $^ -o $@
+
+test: test.o proestasm.a proest128.o
 	$(CC) $(CFLAGS) $^ -o $@
 
 .PHONY: run
@@ -22,4 +28,4 @@ gdb: test
 
 .PHONY: clean
 clean:
-	-rm -f *.s *.o $(BIN)
+	-rm -f *.s *.o *.a $(BIN)

@@ -17,7 +17,7 @@
     puts("--------------------------------------\n\n");
 #define print_subtest(X) puts("  -> " X );
 
-const unsigned int TRAILS = 1;
+#define TRAILS 50
 
 
 /**
@@ -185,6 +185,40 @@ int test_shiftregisters() {
     return 1;
 }
 
+extern void MixColumns(proest_ctx *x);
+int test_mixcolumns() {
+    print_test_header("Checking MixColumns");
+    proest_ctx x, y;
+    print_subtest("Checking C consistency");
+    for (int i = 0; i < TRAILS; i++) {
+        printf("\tRound %d... \t", i);
+        randomize_proeststate(&x);
+        copy_proeststate(&x, &y);
+        MixColumns(&x);
+        MixColumns(&y);
+        if(test_proest_same(&x, &y)) 
+            puts("OK");
+        else return 0;
+    }
+
+
+    print_subtest("Checking C == qhasm result");
+    for (int i = 0; i < TRAILS; i++) {
+        printf("\tRound %d... \t", i);
+        randomize_proeststate(&x);
+        copy_proeststate(&x, &y);
+        MixColumns(&x);
+        ARM_ASM_MixColumns(&y);
+        if (test_proest_same(&x, &y))
+            puts("OK");
+        else return 0;
+    }
+
+    // All done
+    return 1;
+}
+
+
 int main(int argv, char* argc[]) {
     srand(time(NULL));
     //srand(1);
@@ -194,6 +228,7 @@ int main(int argv, char* argc[]) {
     assert(test_sboxes());
     assert(test_addconstant());
     assert(test_shiftregisters());
+    assert(test_mixcolumns());
 
     return 0;
 }
