@@ -1,9 +1,10 @@
-CC = distcc
-AS = distcc as
+DISTCC = distcc
+CC = $(DISTCC) cc
+AS = $(DISTCC) as
 ASFLAGS = --warn
 CFLAGS = -std=c99 -g -Wall -Wpedantic
 BIN = test_asm
-QHASM = distcc qhasm
+QHASM = $(DISTCC) qhasm
 BUILDDIR = build
 
 
