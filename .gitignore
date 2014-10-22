@@ -1,0 +1,4 @@
+build/
+*.o
+*.s
+test_asm
