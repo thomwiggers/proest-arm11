@@ -10,17 +10,12 @@ stack32 caller_r5_stack
 stack32 caller_r6_stack
 # ...
 
-int32 x
-int32 y
-int32 z
-int32 base
-
 enter ARM_ASM_MixColumns
     caller_r4_stack = caller_r4
     caller_r5_stack = caller_r5
     caller_r6_stack = caller_r6
- 
-    # put 32B on stack
+
+    # Get enough stack space
     stack32 newx_0
     stack32 newx_1
     stack32 newx_2
@@ -43,15 +38,18 @@ enter ARM_ASM_MixColumns
     int32 x_12_13
     int32 x_14_15
 
+    # working register
+    int32 x
+
     # newx[0] = x[0] + x[4] + x[7] + x[10] + x[12] + x[14] + x[15]
     x_0_1 = mem32[input_0 + 0]
     x_4_5 = mem32[input_0 + 8] # x[4]
     x_6_7 = mem32[input_0 + 12] # x[7]
-    x = x_0_1 ^ x_4_5
-    x ^= (x_6_7 unsigned>> 16)
     x_10_11 = mem32[input_0 + 20] # x[10]
     x_12_13 = mem32[input_0 + 24] # x[12]
     x_14_15 = mem32[input_0 + 28] # x[14]
+    x = x_0_1 ^ x_4_5
+    x ^= (x_6_7 unsigned>> 16)
     x ^= x_10_11
     x ^= x_12_13
     x ^= x_14_15
@@ -75,8 +73,8 @@ enter ARM_ASM_MixColumns
     newx_1 = x
 
     # newx[2] = x[2] + x[5] + x[8] + x[9] + x[12]
-    x = x_2_3 ^ x_12_13                  # z = x[12] from previous segment
-    x ^= (x_4_5 unsigned>> 16)
+    x = x_12_13 ^ (x_4_5 unsigned>> 16)
+    x ^= x_2_3
     x ^= x_8_9
     x ^= (x_8_9 unsigned>> 16)
 
@@ -98,9 +96,9 @@ enter ARM_ASM_MixColumns
     x_14_15 = mem32[input_0 + 28]
     x = x_10_11 ^ (x_2_3 unsigned>> 16)
     x ^= x_4_5
-    x ^= x_14_15
     x ^= x_8_9
     x ^= (x_10_11 unsigned>> 16)
+    x ^= x_14_15
     x ^= x_0_1
 
     # push x on stack as newx[4]
@@ -129,10 +127,10 @@ enter ARM_ASM_MixColumns
 
     # newx[7] = x[2] + x[7] + x[9] + x[13] + x[14]
     x_2_3 = mem32[input_0 + 4]
-    x = x_2_3 ^ (x_12_13 unsigned>> 16) # x[13]
+    x = x_14_15 ^ (x_12_13 unsigned>> 16) # x[13]
     x ^= (x_6_7 unsigned>> 16)
     x ^= (x_8_9 unsigned>> 16)
-    x ^= x_14_15
+    x ^= x_2_3
     newx_7 = x
 
     # newx[8] = x[2] + x[4] + x[6] + x[7] + x[8] + x[12] + x[15]
@@ -158,14 +156,14 @@ enter ARM_ASM_MixColumns
     # newx[10] = x[0] + x[1] + x[4] + x[10] + x[13]
     x_0_1 = mem32[input_0 + 0]
     x_10_11 = mem32[input_0 + 20]
-    x = x_0_1 ^ x_4_5
-    x ^= (x_12_13 unsigned>> 16)
-    x ^ =(x_0_1 unsigned>> 16)
+    x = x_4_5 ^ (x_12_13 unsigned>> 16)
+    x ^= x_0_1
+    x ^= (x_0_1 unsigned>> 16)
     x ^= x_10_11
 
     # push x on stack as newx[10]
     newx_10 = x
-    
+
     # newx[11] = x[1] + x[2] + x[5] + x[11] + x[14]
     x = x_2_3 ^ (x_0_1 unsigned>> 16)
     x ^= (x_4_5 unsigned>> 16)
@@ -180,21 +178,20 @@ enter ARM_ASM_MixColumns
     x_8_9 = mem32[input_0 + 16]
     x = x_0_1 ^ x_2_3
     x ^= (x_2_3 unsigned>> 16)
-    x ^= x_6_7
-    x ^= x_8_9
     x ^= (x_10_11 unsigned>> 16)
     x ^= x_12_13
-    
+    x ^= x_6_7
+    x ^= x_8_9
+
     # write back into 12, we don't need it anymore
     mem16[input_0 + 24] = x
 
     # newx[13] = x[0] + x[3] + x[7] + x[8] + x[13]
     x = x_0_1 ^ (x_2_3 unsigned>> 16)
-    z = mem32[input_0 + 14]
     x ^= (x_6_7 unsigned>> 16)
     x ^= x_8_9
     x ^= (x_12_13 unsigned>> 16)
-    
+
     # write back into 13, we don't need it anymore
     mem16[input_0 + 26] = x
 
@@ -207,7 +204,6 @@ enter ARM_ASM_MixColumns
     x ^= x_14_15
 
     # write back into 14, we don't need it anymore
-    # TODO merge with below
     mem16[input_0 + 28] = x
 
     # x[15] = x[1] + x[5] + x[6] + x[10] + x[15]
@@ -235,7 +231,7 @@ enter ARM_ASM_MixColumns
 
     x = newx_3
     mem16[input_0 + 6] = x
-    
+
     x = newx_4
     mem16[input_0 + 8] = x
 
