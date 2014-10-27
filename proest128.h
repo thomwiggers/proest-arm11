@@ -19,6 +19,7 @@ void proest_readstate(proest_ctx *r, const unsigned char in[PROEST_STATEBYTES]);
 void proest_writestate(unsigned char out[PROEST_STATEBYTES], const proest_ctx *x);
 
 void proest_permute(proest_ctx *r);
+void proest_permute_C(proest_ctx *r);
 void proest_inverse_permute(proest_ctx *r);
 
 #endif

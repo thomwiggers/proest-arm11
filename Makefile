@@ -2,7 +2,7 @@ DISTCC = distcc
 CC = $(DISTCC) cc
 AS = $(DISTCC) as
 ASFLAGS = --warn
-CFLAGS = -std=c99 -g -Wall -Wpedantic
+CFLAGS = -std=c99 -g -Wall -Wpedantic -O3
 QHASM = $(DISTCC) qhasm
 BUILDDIR = build
 PROEST_ASM_OBJ := proest_mixcolumns.o proest_subbits.o \
@@ -36,5 +36,5 @@ gdb: test_asm
 
 .PHONY: clean
 clean:
-	-rm -f *.s *.o $(BIN)
+	-rm -f *.s *.o test_asm cyclecounter
 	-rm -fr $(BUILDDIR)

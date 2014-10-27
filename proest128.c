@@ -263,6 +263,19 @@ void proest_permute(proest_ctx *x)
   }
 }
 
+void proest_permute_C(proest_ctx *x)
+{
+  int round;
+
+  for(round=0;round<PROEST_NROUNDS;round++)
+  {
+    SubBits(x);
+    MixColumns(x);
+    ShiftRegisters(x,round);
+    AddConstant(x,round);
+  }
+}
+
 void proest_inverse_permute(proest_ctx *x) {
 	int round;
 	
