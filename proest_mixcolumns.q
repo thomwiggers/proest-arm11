@@ -34,230 +34,193 @@ enter ARM_ASM_MixColumns
     stack32 newx_10
     stack32 newx_11
 
+    int32 x_0_1
+    int32 x_2_3
+    int32 x_4_5
+    int32 x_6_7
+    int32 x_8_9
+    int32 x_10_11
+    int32 x_12_13
+    int32 x_14_15
+
     # newx[0] = x[0] + x[4] + x[7] + x[10] + x[12] + x[14] + x[15]
-    x = mem16[input_0 + 0]
-    y = mem16[input_0 + 8] # x[4]
-    x ^= y
-    z = mem16[input_0 + 14] # x[7]
-    x ^= z
-    z = mem16[input_0 + 20] # x[10]
-    x ^= z
-    z = mem16[input_0 + 24] # x[12]
-    x ^= z
-    z = mem16[input_0 + 28] # x[14]
-    x ^= z
-    z = mem16[input_0 + 30] # x[15]
-    x ^= z
+    x_0_1 = mem32[input_0 + 0]
+    x_4_5 = mem32[input_0 + 8] # x[4]
+    x_6_7 = mem32[input_0 + 12] # x[7]
+    x = x_0_1 ^ x_4_5
+    x ^= (x_6_7 unsigned>> 16)
+    x_10_11 = mem32[input_0 + 20] # x[10]
+    x_12_13 = mem32[input_0 + 24] # x[12]
+    x_14_15 = mem32[input_0 + 28] # x[14]
+    x ^= x_10_11
+    x ^= x_12_13
+    x ^= x_14_15
+    x ^= (x_14_15 unsigned>> 16)
 
     # Push x on stack as newx[0]
     newx_0 = x
 
     # newx[1] = x[1] + x[4] + x[11] + x[12] + x[15]
-    x = mem16[input_0 + 2]
-    z = mem16[input_0 + 30] # x[15], already loaded!
-    x ^= z
-    y = mem16[input_0 + 8]  # x[4] already loaded!
-    x ^= y
-    z = mem16[input_0 + 22]   # x[11]
-    x ^= z
-    z = mem16[input_0 + 24]   # x[12]
-    x ^= z
+    x = (x_0_1 unsigned>> 16)
+    x ^= (x_14_15 unsigned>> 16)
+    x ^= x_4_5
+    x ^= (x_10_11 unsigned>> 16)
 
+    # intermezzo: load for next op
+    x_2_3 = mem32[input_0 + 4]
+    x_8_9 = mem32[input_0 + 16]
+
+    x ^= x_12_13
     # push x on stack as newx[1]
     newx_1 = x
 
     # newx[2] = x[2] + x[5] + x[8] + x[9] + x[12]
-    x = mem16[input_0 + 4]
-    x ^= z                  # z = x[12] from previous segment
-    z = mem16[input_0 + 10]
-    x ^= z
-    z = mem16[input_0 + 16]
-    x ^= z
-    z = mem16[input_0 + 18]
-    x ^= z
+    x = x_2_3 ^ x_12_13                  # z = x[12] from previous segment
+    x ^= (x_4_5 unsigned>> 16)
+    x ^= x_8_9
+    x ^= (x_8_9 unsigned>> 16)
 
     # push x on stack as newx[2]
     newx_2 = x
 
     # newx[3] = x[3] + x[6] + x[9] + x[10] + x[13]
-    x = mem16[input_0 + 6]
-    x ^= z                 # z = x[9] from previous segment
-    z = mem16[input_0 + 12]
-    x ^= z
-    z = mem16[input_0 + 26]
-    x ^= z
-    z = mem16[input_0 + 20]
-    x ^= z
+    x = (x_2_3 unsigned>> 16)
+    x ^= (x_8_9 unsigned>> 16)    # z = x[9] from previous segment
+    x ^= x_6_7
+    x ^= (x_12_13 unsigned>> 16)
+    x ^= x_10_11
 
     # push x on stack as newx[3]
     newx_3 = x
 
     # newx[4] = x[0] + x[3] + x[4] + x[8] + x[10] + x[11] + x[14]
-    x = mem16[input_0 + 0]
-    x ^= z                  # z = x[10] 
-    z = mem16[input_0 + 6]
-    x ^= z
-    z = mem16[input_0 + 8]
-    x ^= z
-    z = mem16[input_0 + 28]
-    x ^= z
-    y = mem16[input_0 + 16]
-    x ^= y
-    z = mem16[input_0 + 22]
-    x ^= z
+    x_0_1 = mem32[input_0 + 0]
+    x_14_15 = mem32[input_0 + 28]
+    x = x_10_11 ^ (x_2_3 unsigned>> 16)
+    x ^= x_4_5
+    x ^= x_14_15
+    x ^= x_8_9
+    x ^= (x_10_11 unsigned>> 16)
+    x ^= x_0_1
 
     # push x on stack as newx[4]
     newx_4 = x
 
     # newx[5] = x[0] + x[5] + x[8] + x[11] + x[15]
-    x = mem16[input_0 + 0]
-    x ^= z                  # z = x[11]
-    x ^= y                  # y = x[8]
-    z = mem16[input_0 + 10]
-    x ^= z
-    z = mem16[input_0 + 30]
-    x ^= z
+    x = x_0_1
+    x ^= (x_10_11 unsigned>> 16)          # z = x[11]
+    x ^= x_8_9                  # y = x[8]
+    x ^= (x_4_5 unsigned>> 16)
+    x ^= (x_14_15 unsigned>> 16)
 
     # push x on stack as newx[5]
     newx_5 = x
 
     # newx[6] = x[1] + x[6] + x[8] + x[12] + x[13]
-    x = mem16[input_0 + 2]
-    x ^= y                 # y = x[8]
-    z = mem16[input_0 + 12]
-    x ^= z
-    z = mem16[input_0 + 24]
-    x ^= z
-    z = mem16[input_0 + 26]
-    x ^= z
+    x_12_13 = mem32[input_0 + 24]
+    x = (x_0_1 unsigned>> 16)
+    x ^= x_8_9                 # y = x[8]
+    x ^= x_6_7
+    x ^= x_12_13
+    x ^= (x_12_13 unsigned>> 16)
 
     # push x on stack as newx[6]
     newx_6 = x
 
     # newx[7] = x[2] + x[7] + x[9] + x[13] + x[14]
-    x = mem16[input_0 + 4]
-    x ^= z                 # x[13]
-    z = mem16[input_0 + 14]
-    x ^= z
-    z = mem16[input_0 + 18]
-    x ^= z
-    z = mem16[input_0 + 28]
-    x ^= z
+    x_2_3 = mem32[input_0 + 4]
+    x = x_2_3 ^ (x_12_13 unsigned>> 16) # x[13]
+    x ^= (x_6_7 unsigned>> 16)
+    x ^= (x_8_9 unsigned>> 16)
+    x ^= x_14_15
     newx_7 = x
 
     # newx[8] = x[2] + x[4] + x[6] + x[7] + x[8] + x[12] + x[15]
-    x = mem16[input_0 + 4]
-    z = mem16[input_0 + 8]
-    x ^= z
-    z = mem32[input_0 + 12]
-    x ^= z
-    #z = mem16[input_0 + 14]
-    x ^= (z unsigned>> 16)
-    z = mem16[input_0 + 16]
-    x ^= z
-    z = mem16[input_0 + 24]
-    x ^= z
-    z = mem16[input_0 + 30]
-    x ^= z
+    x = x_2_3 ^ x_4_5
+    x ^= x_6_7
+    x ^= (x_6_7 unsigned>> 16)
+    x ^= x_8_9
+    x ^= (x_14_15 unsigned>> 16)
+    x ^= x_12_13
 
     # push x on stack as newx[8]
     newx_8 = x
 
     # newx[9] = x[3] + x[4] + x[7] + x[9] + x[12]
-    x = mem32[input_0 + 6]
-    x ^= (x unsigned>> 16)
-    z = mem16[input_0 + 14]
-    x ^= z
-    z = mem16[input_0 + 18]
-    x ^= z
-    z = mem16[input_0 + 24]
-    x ^= z
+    x = x_4_5 ^ (x_2_3 unsigned>> 16)
+    x ^= (x_6_7 unsigned>> 16)
+    x ^= (x_8_9 unsigned>> 16)
+    x ^= x_12_13
 
     # push x on stack as newx[9]
     newx_9 = x
 
     # newx[10] = x[0] + x[1] + x[4] + x[10] + x[13]
-    x = mem32[input_0 + 0]
-    x ^= (x unsigned>> 16)
-    z = mem16[input_0 + 8]
-    x ^= z
-    z = mem16[input_0 + 20]
-    x ^= z
-    z = mem16[input_0 + 26]
-    x ^= z
+    x_0_1 = mem32[input_0 + 0]
+    x_10_11 = mem32[input_0 + 20]
+    x = x_0_1 ^ x_4_5
+    x ^= (x_12_13 unsigned>> 16)
+    x ^ =(x_0_1 unsigned>> 16)
+    x ^= x_10_11
 
     # push x on stack as newx[10]
     newx_10 = x
     
     # newx[11] = x[1] + x[2] + x[5] + x[11] + x[14]
-    x = mem32[input_0 + 2]
-    x ^= (x unsigned>> 16) # x[2]
-    z = mem16[input_0 + 10]
-    x ^= z
-    z = mem16[input_0 + 22]
-    x ^= z
-    z = mem16[input_0 + 28]
-    x ^= z
+    x = x_2_3 ^ (x_0_1 unsigned>> 16)
+    x ^= (x_4_5 unsigned>> 16)
+    x ^= (x_10_11 unsigned>> 16)
+    x ^= x_14_15
 
     # push x on stack as newx[11]
     newx_11 = x
 
     # newx[12] = x[0] + x[2] + x[3] + x[6] + x[8] + x[11] + x[12]
-    x = mem16[input_0 + 0]
-    z = mem32[input_0 + 4]
-    x ^= z
-    x ^= (z unsigned>> 16)
-    z = mem32[input_0 + 12]
-    x ^= z
-    z = mem32[input_0 + 16]
-    x ^= z
-    z = mem32[input_0 + 22]
-    x ^= z
-    z = mem32[input_0 + 24]
-    x ^= z
+    x_6_7 = mem32[input_0 + 12]
+    x_8_9 = mem32[input_0 + 16]
+    x = x_0_1 ^ x_2_3
+    x ^= (x_2_3 unsigned>> 16)
+    x ^= x_6_7
+    x ^= x_8_9
+    x ^= (x_10_11 unsigned>> 16)
+    x ^= x_12_13
     
     # write back into 12, we don't need it anymore
     mem16[input_0 + 24] = x
 
     # newx[13] = x[0] + x[3] + x[7] + x[8] + x[13]
-    x = mem16[input_0 + 0]
-    z = mem16[input_0 + 6]
-    x ^= z
+    x = x_0_1 ^ (x_2_3 unsigned>> 16)
     z = mem32[input_0 + 14]
-    x ^= z
-    x ^= (z unsigned>> 16)
-    z = mem16[input_0 + 26]
-    x ^= z
+    x ^= (x_6_7 unsigned>> 16)
+    x ^= x_8_9
+    x ^= (x_12_13 unsigned>> 16)
     
     # write back into 13, we don't need it anymore
     mem16[input_0 + 26] = x
 
     # newx[14] = x[0] + x[4] + x[5] + x[9] + x[14]
-    x = mem16[input_0 + 0]
-    z = mem32[input_0 + 8]
-    x ^= z
-    x ^= (z unsigned>> 16)
-    z = mem16[input_0 + 18]
-    x ^= z
-    z = mem16[input_0 + 28]
-    x ^= z
+    x_4_5 = mem32[input_0 + 8]
+    x_14_15 = mem32[input_0 + 28]
+    x = x_0_1 ^ (x_8_9 unsigned>> 16)
+    x ^= x_4_5
+    x ^= (x_4_5 unsigned>> 16)
+    x ^= x_14_15
 
     # write back into 14, we don't need it anymore
     # TODO merge with below
     mem16[input_0 + 28] = x
 
     # x[15] = x[1] + x[5] + x[6] + x[10] + x[15]
-    x = mem16[input_0 + 2]
-    z = mem32[input_0 + 10]
-    x ^= z
-    x ^= (z unsigned>> 16)
-    z = mem16[input_0 + 20]
-    x ^= z
-    z = mem16[input_0 + 30]
-    x ^= z
+    x = (x_0_1 unsigned>> 16)
+    x ^= (x_4_5 unsigned>> 16)
+    x ^= x_6_7
+    x ^= x_10_11
+    x ^= (x_14_15 unsigned>> 16)
+
     # write back into 15, we don't need it anymore.
     mem16[input_0 + 30] = x
 
+    # TODO work back and reduce these for not-reloaded ones
     # retrieve stuff from stack
     # newx[0]
     x = newx_0
