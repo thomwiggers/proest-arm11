@@ -3,10 +3,10 @@ CC = $(DISTCC) cc
 AS = $(DISTCC) as
 ASFLAGS = --warn
 CFLAGS = -std=c99 -g -Wall -Wpedantic
-BIN = test_asm
 QHASM = $(DISTCC) qhasm
 BUILDDIR = build
-
+PROEST_ASM_OBJ := proest_mixcolumns.o proest_subbits.o \
+				  proest_addconstant.o proest_shiftregisters.o
 
 .PRECIOUS: %.s
 %.s: %.q
@@ -20,16 +20,19 @@ BUILDDIR = build
 %.o: %.s
 	$(AS) $(ASFLAGS) $^ -o $@
 
-$(BIN): test_asm.o proestasm.o proest128.o
+test_asm: test_asm.o proest128.o $(PROEST_ASM_OBJ)
+	$(CC) $(CFLAGS) $^ -o $@
+
+cyclecounter: cyclecounter.o dev4ns.o proest128.o $(PROEST_ASM_OBJ)
 	$(CC) $(CFLAGS) $^ -o $@
 
 .PHONY: run
-run: $(BIN)
-	./$(BIN)
+run: test_asm
+	./test_asm
 
 .PHONY: gdb
-gdb: $(BIN)
-	gdb $(BIN)
+gdb: test_asm
+	gdb test_asm
 
 .PHONY: clean
 clean:

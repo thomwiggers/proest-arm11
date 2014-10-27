@@ -256,10 +256,10 @@ void proest_permute(proest_ctx *x)
 
   for(round=0;round<PROEST_NROUNDS;round++)
   {
-    SubBits(x);
-    MixColumns(x);
-    ShiftRegisters(x,round);
-    AddConstant(x,round);
+    ARM_ASM_SubBits(x);
+    ARM_ASM_MixColumns(x);
+    ARM_ASM_ShiftRegisters(x,round);
+    ARM_ASM_AddConstant(x,round);
   }
 }
 
