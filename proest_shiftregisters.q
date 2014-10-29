@@ -37,11 +37,10 @@ enter ARM_ASM_ShiftRegisters
     #input_0: proest_ctx
     #input_1: rounds
     
-    base = input_0 + 8 # first rotate is zero
-    x = input_1 & 1
-    # FIXME uitzoeken of dit niet zonder deze test kan mbv ands
-    =? x - 1 
-    goto shiftregisters_odd if =
+    base = input_0 + 8 # first rotate is by zero
+
+    =? x = input_1 & 1
+    goto shiftregisters_odd if !=
 
         # x[1][0]
         # x[1][1]
