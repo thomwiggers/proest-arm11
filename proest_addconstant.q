@@ -76,13 +76,13 @@ enter ARM_ASM_AddConstant
     y = c2 ^ (x_6_7 unsigned>> 16)
     x_6_7 ^= (c1 >>> 26)
 
-    mem16[input_0] = x_6_7; input_0 += 2
-    mem16[input_0] = y;     input_0 += 2
+    mem16[input_0] = x_6_7; input_0 += 4
 
     # FIXME get better labels, except wtf that doesn't work.
     x_0_1 x_2_3 x_4_5 x_6_7 = mem128[input_0]
 
     # FIXME get rid of latency (related to ^)
+    mem16[input_0 - 2] = y
     c2 >>>= 30
 
     y = c2 ^ (x_0_1 unsigned>> 16)
@@ -104,7 +104,7 @@ enter ARM_ASM_AddConstant
     c2 >>>= 30
 
     mem16[input_0] = x_4_5; input_0 += 2
-    mem16[input_0] = y;     input_0 +=2
+    mem16[input_0] = y;     input_0 += 2
 
     #x_6_7 = mem32[input_0]
     y = c2 ^ (x_6_7 unsigned>> 16)
