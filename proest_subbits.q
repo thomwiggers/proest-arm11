@@ -15,54 +15,138 @@ int32 x
 int32 y
 int32 z
 int32 ctr
-int32 base
+
+int32 x_0_1
+int32 x_2_3
+int32 x_3_4
+int32 x_4_5
+int32 x_6_7
+int32 x_8_9
+int32 x_10_11
+int32 x_12_13
+int32 x_14_15
+
+int32 bits_0
+int32 bits_1
+int32 bits_2
+int32 bits_3
+int32 bits_4
+int32 bits_5
+int32 bits_6
+int32 bits_7
+int32 bits_8
+int32 bits_9
+int32 bits_10
+int32 bits_11
+int32 bits_12
+int32 bits_13
+int32 bits_14
+int32 bits_15
 
 enter ARM_ASM_SubBits
     caller_r4_stack = caller_r4
     caller_r5_stack = caller_r5
     caller_r6_stack = caller_r6
 
-    # Start of a[0] = input_0
-    ctr = 4
-    base = input_0
-    loop_subbits:
-        # p = bits[0], q = bits[1]
-        p = mem32[base + 0]
+    # p = bits[0], q = bits[1]
+    x_0_1 x_2_3 x_4_5 x_6_7 = mem128[input_0]
+    # FIXME 4 cycle latency
 
-        # bits[0] = bits[2] ^ (p & q)
-        x = p & (p unsigned>> 16)
-        y = mem16[base + 4]
-        x ^= y
-        mem16[base + 0] = x
+    # bits[0] = bits[2] ^ (p & q)
+    bits_0 = x_0_1 & (x_0_1 unsigned>> 16)
+    bits_0 ^= x_2_3
+    mem16[input_0] = bits_0; input_0 += 2
 
-        # bits[1] = bits[3] ^ (q & bits[2])
-        # y = bits[2]
-        y = mem16[base + 4]
-        y &= (p unsigned>> 16)
-        z = mem16[base + 6]
-        y ^= z
-        mem16[base + 2] = y
-        
-        # bits[2] = p ^ (bits[0] & bits[1])
-        x = mem32[base + 0]
-        x &= (x unsigned>> 16)
-        x ^= p # x = bits[2]
-        mem16[base + 4] = x
-        
-        # bits[3] = q ^ (bits[1] & bits[2])
-        z = mem32[base + 2]
-        z &= (z unsigned>> 16)
-        z ^= (p unsigned>> 16)
-        mem16[base + 6] = z
-        
-        #  JUMP
-        base += 8
-        unsigned>? ctr -= 1
-        goto loop_subbits if unsigned>
+    # bits[1] = bits[3] ^ (q & bits[2])
+    bits_1 = x_2_3 & (x_0_1 unsigned>> 16)
+    bits_1 ^= (x_2_3 unsigned>> 16)
+    mem16[input_0] = bits_1; input_0 += 2
+
+    # bits[2] = p ^ (bits[0] & bits[1])
+    bits_2 = bits_0 & bits_1
+    bits_2 ^= x_0_1
+    mem16[input_0] = bits_2; input_0 += 2
+
+    # bits[3] = q ^ (bits[1] & bits[2])
+    bits_3 = bits_1 & bits_2
+    bits_3 ^= (x_0_1 unsigned>> 16)
+    mem16[input_0] = bits_3; input_0 += 2
+
+    # Second iteration
+
+    # bits[4] = bits[6] ^ (p & q)
+    bits_4 = x_4_5 & (x_4_5 unsigned>> 16)
+    bits_4 ^= x_6_7
+    mem16[input_0] = bits_4; input_0 += 8
+
+    # bits[5] = bits[7] ^ (q & bits[6])
+    # y = bits[6]
+    bits_5 = x_6_7 & (x_4_5 unsigned>> 16)
+    bits_5 ^= (x_6_7 unsigned>> 16)
+
+    # bits[6] = p ^ (bits[4] & bits[5])
+    bits_6 = bits_4 & bits_5
+    bits_6 ^= x_4_5
+
+    # bits[7] = q ^ (bits[5] & bits[6])
+    bits_7 = bits_5 & bits_6
+    bits_7 ^= (x_4_5 unsigned>> 16)
+
+    # load next stuff
+    x_0_1 x_2_3 x_4_5 x_6_7 = mem128[input_0]
+
+    # delayed saves to fill pipeline
+    mem16[input_0 - 6] = bits_5
+    mem16[input_0 - 4] = bits_6
+    mem16[input_0 - 2] = bits_7
+
+    # Third iteration
+    # FIXME don't reuse labels except qhasm borks
+
+    # bits[8] = bits[2] ^ (p & q)
+    bits_8 = x_0_1 & (x_0_1 unsigned>> 16)
+    bits_8 ^= x_2_3
+    mem16[input_0] = bits_8; input_0 += 2
+
+    # bits[1] = bits[3] ^ (q & bits[2])
+    bits_9 = x_2_3 & (x_0_1 unsigned>> 16)
+    bits_9 ^= (x_2_3 unsigned>> 16)
+    mem16[input_0] = bits_9; input_0 += 2
+
+    # bits[2] = p ^ (bits[0] & bits[1])
+    bits_10 = bits_8 & bits_9
+    bits_10 ^= x_0_1
+    mem16[input_0] = bits_10; input_0 += 2
+
+    # bits[3] = q ^ (bits[1] & bits[2])
+    bits_11 = bits_9 & bits_10
+    bits_11 ^= (x_0_1 unsigned>> 16)
+    mem16[input_0] = bits_11; input_0 += 2
+
+    # Fourth iteration
+
+    # bits[4] = bits[6] ^ (p & q)
+    bits_12 = x_4_5 & (x_4_5 unsigned>> 16)
+    bits_12 ^= x_6_7
+    mem16[input_0] = bits_12; input_0 += 2
+
+    # bits[5] = bits[7] ^ (q & bits[6])
+    # y = bits[6]
+    bits_13 = x_6_7 & (x_4_5 unsigned>> 16)
+    bits_13 ^= (x_6_7 unsigned>> 16)
+    mem16[input_0] = bits_13; input_0 += 2
+
+    # bits[6] = p ^ (bits[4] & bits[5])
+    bits_14 = bits_12 & bits_13
+    bits_14 ^= x_4_5
+    mem16[input_0] = bits_14; input_0 += 2
+
+    # bits[7] = q ^ (bits[5] & bits[6])
+    bits_15 = bits_13 & bits_14
+    bits_15 ^= (x_4_5 unsigned>> 16)
+    mem16[input_0] = bits_15; input_0 += 2
 
     caller_r4 = caller_r4_stack
     caller_r5 = caller_r5_stack
     caller_r6 = caller_r6_stack
-
 return
-
