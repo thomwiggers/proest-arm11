@@ -43,11 +43,11 @@ enter ARM_ASM_MixColumns
 
     # newx[0] = x[0] + x[4] + x[7] + x[10] + x[12] + x[14] + x[15]
     x_0_1 = mem32[input_0 + 0]
-    x_4_5 = mem32[input_0 + 8] # x[4]
-    x_6_7 = mem32[input_0 + 12] # x[7]
-    x_10_11 = mem32[input_0 + 20] # x[10]
-    x_12_13 = mem32[input_0 + 24] # x[12]
-    x_14_15 = mem32[input_0 + 28] # x[14]
+    x_4_5 = mem32[input_0 + 8]
+    x_6_7 = mem32[input_0 + 12]
+    x_10_11 = mem32[input_0 + 20]
+    x_12_13 = mem32[input_0 + 24]
+    x_14_15 = mem32[input_0 + 28]
     x = x_0_1 ^ x_4_5
     x ^= (x_6_7 unsigned>> 16)
     x ^= x_10_11
@@ -83,7 +83,7 @@ enter ARM_ASM_MixColumns
 
     # newx[3] = x[3] + x[6] + x[9] + x[10] + x[13]
     x = (x_2_3 unsigned>> 16)
-    x ^= (x_8_9 unsigned>> 16)    # z = x[9] from previous segment
+    x ^= (x_8_9 unsigned>> 16)
     x ^= x_6_7
     x ^= (x_12_13 unsigned>> 16)
     x ^= x_10_11
@@ -106,8 +106,8 @@ enter ARM_ASM_MixColumns
 
     # newx[5] = x[0] + x[5] + x[8] + x[11] + x[15]
     x = x_0_1
-    x ^= (x_10_11 unsigned>> 16)          # z = x[11]
-    x ^= x_8_9                  # y = x[8]
+    x ^= (x_10_11 unsigned>> 16)
+    x ^= x_8_9
     x ^= (x_4_5 unsigned>> 16)
     x ^= (x_14_15 unsigned>> 16)
 
@@ -117,7 +117,7 @@ enter ARM_ASM_MixColumns
     # newx[6] = x[1] + x[6] + x[8] + x[12] + x[13]
     x_12_13 = mem32[input_0 + 24]
     x = (x_0_1 unsigned>> 16)
-    x ^= x_8_9                 # y = x[8]
+    x ^= x_8_9
     x ^= x_6_7
     x ^= x_12_13
     x ^= (x_12_13 unsigned>> 16)
@@ -161,8 +161,8 @@ enter ARM_ASM_MixColumns
     x ^= (x_0_1 unsigned>> 16)
     x ^= x_10_11
 
-    # push x on stack as newx[10]
-    newx_10 = x
+    # Write back x to x[10]
+    mem16[input_0 + 20] = x
 
     # newx[11] = x[1] + x[2] + x[5] + x[11] + x[14]
     x = x_2_3 ^ (x_0_1 unsigned>> 16)
@@ -170,8 +170,8 @@ enter ARM_ASM_MixColumns
     x ^= (x_10_11 unsigned>> 16)
     x ^= x_14_15
 
-    # push x on stack as newx[11]
-    newx_11 = x
+    # Write back x into x[11]
+    mem16[input_0 + 22] = x
 
     # newx[12] = x[0] + x[2] + x[3] + x[6] + x[8] + x[11] + x[12]
     x_6_7 = mem32[input_0 + 12]
@@ -249,12 +249,6 @@ enter ARM_ASM_MixColumns
 
     x = newx_9
     mem16[input_0 + 18] = x
-
-    x = newx_10
-    mem16[input_0 + 20] = x
-
-    x = newx_11
-    mem16[input_0 + 22] = x
 
     caller_r4 = caller_r4_stack
     caller_r5 = caller_r5_stack
