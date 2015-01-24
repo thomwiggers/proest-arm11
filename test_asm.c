@@ -213,11 +213,65 @@ int test_mixcolumns() {
             puts("OK");
         else return 0;
     }
+    print_test_footer();
 
     // All done
     return 1;
 }
 
+int test_minimixcolumns() {
+    print_test_header("Checking MiniMixColumns");
+    proest_ctx x, y;
+
+    print_subtest("Checking C == qhasm result");
+    for (int i = 0; i < TRAILS; i++) {
+        printf("\tRound %d... \t", i);
+        randomize_proeststate(&x);
+        copy_proeststate(&x, &y);
+        MixColumns(&x);
+        ARM_ASM_MiniMixColumns(&y);
+        if (test_proest_same(&x, &y))
+            puts("OK");
+        else return 0;
+    }
+    print_test_footer();
+
+    // All done
+    return 1;
+}
+
+int test_proest_permute() {
+    print_test_header("Checking proest permute");
+    proest_ctx x, y;
+    print_subtest("Checking C consistency");
+    for (int i = 0; i < TRAILS; i++) {
+        printf("\tRound %d... \t", i);
+        randomize_proeststate(&x);
+        copy_proeststate(&x, &y);
+        proest_permute_C(&x);
+        proest_permute_C(&y);
+        if(test_proest_same(&x, &y))
+            puts("OK");
+        else return 0;
+    }
+
+
+    print_subtest("Checking C == qhasm result");
+    for (int i = 0; i < TRAILS; i++) {
+        printf("\tRound %d... \t", i);
+        randomize_proeststate(&x);
+        copy_proeststate(&x, &y);
+        proest_permute_C(&x);
+        proest_permute(&y);
+        if (test_proest_same(&x, &y))
+            puts("OK");
+        else return 0;
+    }
+
+    print_test_footer();
+    // All done
+    return 1;
+}
 
 int main(int argv, char* argc[]) {
     srand(time(NULL));
@@ -229,6 +283,8 @@ int main(int argv, char* argc[]) {
     assert(test_addconstant());
     assert(test_shiftregisters());
     assert(test_mixcolumns());
+    assert(test_minimixcolumns());
+    assert(test_proest_permute());
 
     return 0;
 }

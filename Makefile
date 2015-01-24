@@ -2,15 +2,21 @@ DISTCC = distcc
 CC = $(DISTCC) cc
 AS = $(DISTCC) as
 ASFLAGS = --warn
-CFLAGS = -std=c99 -g -Wall -Wpedantic -O3
+CFLAGS = -std=c99 -g -Wall -Wpedantic -O2
 QHASM = $(DISTCC) qhasm
 BUILDDIR = build
+MAQ = ../../../../maq/maq
 PROEST_ASM_OBJ := proest_mixcolumns.o proest_subbits.o \
-				  proest_addconstant.o proest_shiftregisters.o
+				  proest_addconstant.o proest_shiftregisters.o \
+				  proest_subbitsmixcolumns.o \
+				  proest_minimixcolumns.o
+
+%.q: %.pq
+	$(MAQ) $^ > $@
 
 .PRECIOUS: %.s
 %.s: %.q
-	mkdir -p $(BUILDDIR)
+	@mkdir -p $(BUILDDIR)
 	cp $^ $(BUILDDIR)/$^.c
 	$(QHASM) -c $(BUILDDIR)/$^.c -o $@
 

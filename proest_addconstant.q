@@ -44,7 +44,7 @@ enter ARM_ASM_AddConstant
     z -= input_1
 
     # preload data
-    x_0_1 x_2_3 x_4_5 x_6_7 = mem128[input_0]
+    assign r4 r5 r6 r12 to x_0_1 x_2_3 x_4_5 x_6_7 = mem128[input_0]
 
     # rotate c1, c2 left by input_0 = right by 32-input_0
     c1 >>>= z
@@ -78,40 +78,39 @@ enter ARM_ASM_AddConstant
 
     mem16[input_0] = x_6_7; input_0 += 4
 
-    # FIXME get better labels, except wtf that doesn't work.
-    x_0_1 x_2_3 x_4_5 x_6_7 = mem128[input_0]
+    assign r4 r5 r6 r12 to x_8_9 x_10_11 x_12_13 x_14_15 = mem128[input_0]
 
     # FIXME get rid of latency (related to ^)
     mem16[input_0 - 2] = y
     c2 >>>= 30
 
-    y = c2 ^ (x_0_1 unsigned>> 16)
-    x_0_1 ^= (c1 >>> 24)
+    y = c2 ^ (x_8_9 unsigned>> 16)
+    x_8_9 ^= (c1 >>> 24)
     c2 >>>= 30
 
-    mem16[input_0] = x_0_1; input_0 += 2
+    mem16[input_0] = x_8_9; input_0 += 2
     mem16[input_0] = y;     input_0 += 2
 
-    y = c2 ^ (x_2_3 unsigned>> 16)
-    x_2_3 ^= (c1 >>> 22)
+    y = c2 ^ (x_10_11 unsigned>> 16)
+    x_10_11 ^= (c1 >>> 22)
     c2 >>>= 30
 
-    mem16[input_0] = x_2_3; input_0 += 2
+    mem16[input_0] = x_10_11; input_0 += 2
     mem16[input_0] = y;     input_0 += 2
 
-    y = c2 ^ (x_4_5 unsigned>> 16)
-    x_4_5 ^= (c1 >>> 20)
+    y = c2 ^ (x_12_13 unsigned>> 16)
+    x_12_13 ^= (c1 >>> 20)
     c2 >>>= 30
 
-    mem16[input_0] = x_4_5; input_0 += 2
+    mem16[input_0] = x_12_13; input_0 += 2
     mem16[input_0] = y;     input_0 += 2
 
-    #x_6_7 = mem32[input_0]
-    y = c2 ^ (x_6_7 unsigned>> 16)
-    x_6_7 ^= (c1 >>> 18)
+    #x_14_15 = mem32[input_0]
+    y = c2 ^ (x_14_15 unsigned>> 16)
+    x_14_15 ^= (c1 >>> 18)
 
-    mem16[input_0] = x_6_7; input_0 += 2
-    mem16[input_0] = y;     input_0 += 2
+    mem16[input_0] = x_14_15; input_0 += 2
+    mem16[input_0] = y;       input_0 += 2
 
 
     caller_r4 = caller_r4_stack

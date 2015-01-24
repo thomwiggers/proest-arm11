@@ -6,9 +6,9 @@
 #include <sys/time.h>
 
 static int fddev = -1;
-static int prev[3];
+static unsigned int prev[3];
 static unsigned long long prevcycles = 0;
-static int now[3];
+static unsigned int now[3];
 static long long cyclespersec = 0;
 
 static void readdev(unsigned int *result)

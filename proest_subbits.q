@@ -49,7 +49,7 @@ enter ARM_ASM_SubBits
     caller_r6_stack = caller_r6
 
     # p = bits[0], q = bits[1]
-    x_0_1 x_2_3 x_4_5 x_6_7 = mem128[input_0]
+    assign r1 r3 r4 r5 to x_0_1 x_2_3 x_4_5 x_6_7 = mem128[input_0]
     # FIXME 4 cycle latency
 
     # bits[0] = bits[2] ^ (p & q)
@@ -77,7 +77,7 @@ enter ARM_ASM_SubBits
     # bits[4] = bits[6] ^ (p & q)
     bits_4 = x_4_5 & (x_4_5 unsigned>> 16)
     bits_4 ^= x_6_7
-    mem16[input_0] = bits_4; input_0 += 8
+    mem16[input_0] = bits_4; input_0 += 6
 
     # bits[5] = bits[7] ^ (q & bits[6])
     # y = bits[6]
@@ -92,13 +92,14 @@ enter ARM_ASM_SubBits
     bits_7 = bits_5 & bits_6
     bits_7 ^= (x_4_5 unsigned>> 16)
 
+    mem16[input_0] = bits_7; input_0 += 2
+
     # load next stuff
-    x_0_1 x_2_3 x_4_5 x_6_7 = mem128[input_0]
+    assign r2 r3 r4 r6 to x_0_1 x_2_3 x_4_5 x_6_7 = mem128[input_0]
 
     # delayed saves to fill pipeline
-    mem16[input_0 - 6] = bits_5
+    mem16[input_0 - 6] = bits_5  # FIXME these spend 2 calc cycles!!!!
     mem16[input_0 - 4] = bits_6
-    mem16[input_0 - 2] = bits_7
 
     # Third iteration
     # FIXME don't reuse labels except qhasm borks
