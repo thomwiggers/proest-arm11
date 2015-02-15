@@ -9,7 +9,6 @@ int32 x_1_3
 int32 x_2_0
 int32 x_2_1
 int32 x_2_2
-#int32 x_2_3
 int32 x_3_0
 int32 x_3_1
 int32 x_3_2
@@ -160,20 +159,7 @@ enter ARM_ASM_proest_rounds_two
     bits_15 ^= (x_12_13 unsigned>> 16)
     mem16[input_0 + 30] = bits_15
 
-    caller_r4 = mem32[input_0 + 52]
-    caller_r5 = mem32[input_0 + 56]
-    caller_r6 = mem32[input_0 + 60]
-    loadsp[input_0 + 64]
-#return
-# Proest functions in ARM11 assembly
-# Author: Thom Wiggers <thom@thomwiggers.nl>
-# vim: set ts=4 sw=4 tw=0 et :
-
 #enter ARM_ASM_MixColumns
-    mem32[input_0 + 52] = caller_r4
-    mem32[input_0 + 56] = caller_r5
-    mem32[input_0 + 60] = caller_r6
-    storesp[input_0 + 64]
 
     # newx[0] = x[0] + x[4] + x[7] + x[10] + x[12] + x[14] + x[15]
     x_0_1 = mem32[input_0 + 0]
@@ -391,23 +377,8 @@ enter ARM_ASM_proest_rounds_two
     x = mem16[input_0 + 50]
     mem16[input_0 + 18] = x
 
-    caller_r4 = mem32[input_0 + 52]
-    caller_r5 = mem32[input_0 + 56]
-    caller_r6 = mem32[input_0 + 60]
-    loadsp[input_0 + 64]
-#return
-# Proest functions in ARM11 assembly
-# Author: Thom Wiggers <thom@thomwiggers.nl>
-# vim: set ts=4 sw=4 tw=0 et :
-
-
 
 #enter ARM_ASM_ShiftRegisters
-    mem32[input_0 + 52] = caller_r4
-    mem32[input_0 + 56] = caller_r5
-    mem32[input_0 + 60] = caller_r6
-    storesp[input_0 + 64]
-
     #input_0: proest_ctx
     #input_1: rounds
 
@@ -475,92 +446,8 @@ enter ARM_ASM_proest_rounds_two
     mem16[input_0 + 28] = x_3_2
     mem16[input_0 + 30] = x_3_3
 
-    caller_r4 = mem32[input_0 + 52]
-    caller_r5 = mem32[input_0 + 56]
-    caller_r6 = mem32[input_0 + 60]
-    loadsp[input_0 + 64]
-    #return
-
-#   shiftregisters_odd:
-#       # x[1][0]
-#       # x[1][1]
-#       # x[1][2]
-#       # x[1][3]
-#       x_1_0 = mem16[input_0 + 8]
-#       x_1_1 = mem16[input_0 + 10]
-#       x_1_2 = mem16[input_0 + 12]
-#       x_1_3 = mem16[input_0 + 14]
-#       x_1_0 |= (x_1_0 << 16)
-#       x_1_1 |= (x_1_1 << 16)
-#       x_1_2 |= (x_1_2 << 16)
-#       x_1_3 |= (x_1_3 << 16)
-#       x_1_0 >>>= 1
-#       x_1_1 >>>= 1
-#       x_1_2 >>>= 1
-#       x_1_3 >>>= 1
-#       mem16[input_0 + 8] = x_1_0
-#       mem16[input_0 + 10] = x_1_1
-#       mem16[input_0 + 12] = x_1_2
-#       mem16[input_0 + 14] = x_1_3
-#
-#       # x[2][0]
-#       # x[2][1]
-#       # x[2][2]
-#       # x[2][3]
-#       x_2_0 = mem16[input_0 + 16]
-#       x_2_1 = mem16[input_0 + 18]
-#       x_2_2 = mem16[input_0 + 20]
-#       x_2_3 = mem16[input_0 + 22]
-#       x_2_0 |= (x_2_0 << 16)
-#       x_2_1 |= (x_2_1 << 16)
-#       x_2_2 |= (x_2_2 << 16)
-#       x_2_3 |= (x_2_3 << 16)
-#       x_2_0 >>>= 8
-#       x_2_1 >>>= 8
-#       x_2_2 >>>= 8
-#       x_2_3 >>>= 8
-#       mem16[input_0 + 16] = x_2_0
-#       mem16[input_0 + 18] = x_2_1
-#       mem16[input_0 + 20] = x_2_2
-#       mem16[input_0 + 22] = x_2_3
-#
-#       # x[3][0]
-#       # x[3][1]
-#       # x[3][2]
-#       # x[3][3]
-#       x_3_0 = mem16[input_0 + 24]
-#       x_3_1 = mem16[input_0 + 26]
-#       x_3_2 = mem16[input_0 + 28]
-#       x_3_3 = mem16[input_0 + 30]
-#       x_3_0 |= (x_3_0 << 16)
-#       x_3_1 |= (x_3_1 << 16)
-#       x_3_2 |= (x_3_2 << 16)
-#       x_3_3 |= (x_3_3 << 16)
-#       x_3_0 >>>= 9
-#       x_3_1 >>>= 9
-#       x_3_2 >>>= 9
-#       x_3_3 >>>= 9
-#       mem16[input_0 + 24] = x_3_0
-#       mem16[input_0 + 26] = x_3_1
-#       mem16[input_0 + 28] = x_3_2
-#       mem16[input_0 + 30] = x_3_3
-#
-#   caller_r4 = mem32[input_0 + 52]
-#   caller_r5 = mem32[input_0 + 56]
-#   caller_r6 = mem32[input_0 + 60]
-#   loadsp[input_0 + 64]
-#return
-
-
-# Proest functions in ARM11 assembly
-# Author: Thom Wiggers <thom@thomwiggers.nl>
-# vim: set ts=4 sw=4 tw=0 et :
 
 #enter ARM_ASM_AddConstant
-    mem32[input_0 + 52] = caller_r4
-    mem32[input_0 + 56] = caller_r5
-    mem32[input_0 + 60] = caller_r6
-    storesp[input_0 + 64]
     # input_0 => proest_ctx
     # input_1 => rounds
 
@@ -645,35 +532,17 @@ enter ARM_ASM_proest_rounds_two
     mem16[input_0 + 28] = x_14_15
     mem16[input_0 + 30] = y
 
-    caller_r4 = mem32[input_0 + 52] # 52
-    caller_r5 = mem32[input_0 + 56] # 56
-    caller_r6 = mem32[input_0 + 60] # 60
-    loadsp[input_0 + 64]
-#return
-
-
-# Proest functions in ARM11 assembly
-# Author: Thom Wiggers <thom@thomwiggers.nl>
-# vim: set ts=4 sw=4 tw=0 et :
-
-
 ##################################################################
 # SECOND ROUND!                                                  #
 ##################################################################
 
 #enter ARM_ASM_SubBits
-    mem32[input_0 + 52] = caller_r4
-    mem32[input_0 + 56] = caller_r5
-    mem32[input_0 + 60] = caller_r6
-    storesp[input_0 + 64]
-
     # p = bits[0], q = bits[1]
     x_0_1 = mem32[input_0 + 0]
     x_2_3 = mem32[input_0 + 4]
     x_4_5 = mem32[input_0 + 8]
     x_6_7 = mem32[input_0 + 12]
     #assign r1 r3 r4 r5 to x_0_1 x_2_3 x_4_5 x_6_7 = mem128[input_0]
-    # FIXME 4 cycle latency
 
     # bits[0] = bits[2] ^ (p & q)
     bits_0 = x_0_1 & (x_0_1 unsigned>> 16)
@@ -770,21 +639,7 @@ enter ARM_ASM_proest_rounds_two
     bits_15 ^= (x_12_13 unsigned>> 16)
     mem16[input_0 + 30] = bits_15
 
-    caller_r4 = mem32[input_0 + 52]
-    caller_r5 = mem32[input_0 + 56]
-    caller_r6 = mem32[input_0 + 60]
-    loadsp[input_0 + 64]
-    #return
-# Proest functions in ARM11 assembly
-# Author: Thom Wiggers <thom@thomwiggers.nl>
-# vim: set ts=4 sw=4 tw=0 et :
-
 #enter ARM_ASM_MixColumns
-    mem32[input_0 + 52] = caller_r4
-    mem32[input_0 + 56] = caller_r5
-    mem32[input_0 + 60] = caller_r6
-    storesp[input_0 + 64]
-
     # newx[0] = x[0] + x[4] + x[7] + x[10] + x[12] + x[14] + x[15]
     x_0_1 = mem32[input_0 + 0]
     x_4_5 = mem32[input_0 + 8]
@@ -1001,180 +856,78 @@ enter ARM_ASM_proest_rounds_two
     x = mem16[input_0 + 50]
     mem16[input_0 + 18] = x
 
-    caller_r4 = mem32[input_0 + 52]
-    caller_r5 = mem32[input_0 + 56]
-    caller_r6 = mem32[input_0 + 60]
-    loadsp[input_0 + 64]
-#return
-# Proest functions in ARM11 assembly
-# Author: Thom Wiggers <thom@thomwiggers.nl>
-# vim: set ts=4 sw=4 tw=0 et :
-
 #enter ARM_ASM_ShiftRegisters
-    mem32[input_0 + 52] = caller_r4
-    mem32[input_0 + 56] = caller_r5
-    mem32[input_0 + 60] = caller_r6
-    storesp[input_0 + 64]
-
     #input_0: proest_ctx
     #input_1: rounds
+    # x[1][0]
+    # x[1][1]
+    # x[1][2]
+    # x[1][3]
+    x_1_0 = mem16[input_0 + 8]
+    x_1_1 = mem16[input_0 + 10]
+    x_1_2 = mem16[input_0 + 12]
+    x_1_3 = mem16[input_0 + 14]
+    x_1_0 |= (x_1_0 << 16)
+    x_1_1 |= (x_1_1 << 16)
+    x_1_2 |= (x_1_2 << 16)
+    x_1_3 |= (x_1_3 << 16)
+    x_1_0 >>>= 1
+    x_1_1 >>>= 1
+    x_1_2 >>>= 1
+    x_1_3 >>>= 1
+    mem16[input_0 + 8] = x_1_0
+    mem16[input_0 + 10] = x_1_1
+    mem16[input_0 + 12] = x_1_2
+    mem16[input_0 + 14] = x_1_3
 
+    # x[2][0]
+    # x[2][1]
+    # x[2][2]
+    # x[2][3]
+    x_2_0 = mem16[input_0 + 16]
+    x_2_1 = mem16[input_0 + 18]
+    x_2_2 = mem16[input_0 + 20]
+    x_2_3 = mem16[input_0 + 22]
+    x_2_0 |= (x_2_0 << 16)
+    x_2_1 |= (x_2_1 << 16)
+    x_2_2 |= (x_2_2 << 16)
+    x_2_3 |= (x_2_3 << 16)
+    x_2_0 >>>= 8
+    x_2_1 >>>= 8
+    x_2_2 >>>= 8
+    x_2_3 >>>= 8
+    mem16[input_0 + 16] = x_2_0
+    mem16[input_0 + 18] = x_2_1
+    mem16[input_0 + 20] = x_2_2
+    mem16[input_0 + 22] = x_2_3
 
-#   =? x = input_1 & 1
-#   goto shiftregisters_odd if !=
-#
-#       # x[1][0]
-#       # x[1][1]
-#       # x[1][2]
-#       # x[1][3]
-#       x_1_0 = mem16[input_0 + 8]
-#       x_1_1 = mem16[input_0 + 10]
-#       x_1_2 = mem16[input_0 + 12]
-#       x_1_3 = mem16[input_0 + 14]
-#       x_1_0 |= (x_1_0 << 16)
-#       x_1_1 |= (x_1_1 << 16)
-#       x_1_2 |= (x_1_2 << 16)
-#       x_1_3 |= (x_1_3 << 16)
-#       x_1_0 >>>= 2
-#       x_1_1 >>>= 2
-#       x_1_2 >>>= 2
-#       x_1_3 >>>= 2
-#       mem16[input_0 + 8] = x_1_0
-#       mem16[input_0 + 10] = x_1_1
-#       mem16[input_0 + 12] = x_1_2
-#       mem16[input_0 + 14] = x_1_3
-#
-#       # x[2][0]
-#       # x[2][1]
-#       # x[2][2]
-#       # x[2][3]
-#       x_2_0 = mem16[input_0 + 16]
-#       x_2_1 = mem16[input_0 + 18]
-#       x_2_2 = mem16[input_0 + 20]
-#       x_2_3 = mem16[input_0 + 22]
-#       x_2_0 |= (x_2_0 << 16)
-#       x_2_1 |= (x_2_1 << 16)
-#       x_2_2 |= (x_2_2 << 16)
-#       x_2_3 |= (x_2_3 << 16)
-#       x_2_0 >>>= 4
-#       x_2_1 >>>= 4
-#       x_2_2 >>>= 4
-#       x_2_3 >>>= 4
-#       mem16[input_0 + 16] = x_2_0
-#       mem16[input_0 + 18] = x_2_1
-#       mem16[input_0 + 20] = x_2_2
-#       mem16[input_0 + 22] = x_2_3
-#
-#
-#       # x[3][0]
-#       # x[3][1]
-#       # x[3][2]
-#       # x[3][3]
-#       x_3_0 = mem16[input_0 + 24]
-#       x_3_1 = mem16[input_0 + 26]
-#       x_3_2 = mem16[input_0 + 28]
-#       x_3_3 = mem16[input_0 + 30]
-#       x_3_0 |= (x_3_0 << 16)
-#       x_3_1 |= (x_3_1 << 16)
-#       x_3_2 |= (x_3_2 << 16)
-#       x_3_3 |= (x_3_3 << 16)
-#       x_3_0 >>>= 6
-#       x_3_1 >>>= 6
-#       x_3_2 >>>= 6
-#       x_3_3 >>>= 6
-#       mem16[input_0 + 24] = x_3_0
-#       mem16[input_0 + 26] = x_3_1
-#       mem16[input_0 + 28] = x_3_2
-#       mem16[input_0 + 30] = x_3_3
-#
-#   caller_r4 = mem32[input_0 + 52]
-#   caller_r5 = mem32[input_0 + 56]
-#   caller_r6 = mem32[input_0 + 60]
-#   loadsp[input_0 + 64]
-#   return
+    # x[3][0]
+    # x[3][1]
+    # x[3][2]
+    # x[3][3]
+    x_3_0 = mem16[input_0 + 24]
+    x_3_1 = mem16[input_0 + 26]
+    x_3_2 = mem16[input_0 + 28]
+    x_3_3 = mem16[input_0 + 30]
+    x_3_0 |= (x_3_0 << 16)
+    x_3_1 |= (x_3_1 << 16)
+    x_3_2 |= (x_3_2 << 16)
+    x_3_3 |= (x_3_3 << 16)
+    x_3_0 >>>= 9
+    x_3_1 >>>= 9
+    x_3_2 >>>= 9
+    x_3_3 >>>= 9
+    mem16[input_0 + 24] = x_3_0
+    mem16[input_0 + 26] = x_3_1
+    mem16[input_0 + 28] = x_3_2
+    mem16[input_0 + 30] = x_3_3
 
-#    shiftregisters_odd:
-        # x[1][0]
-        # x[1][1]
-        # x[1][2]
-        # x[1][3]
-        x_1_0 = mem16[input_0 + 8]
-        x_1_1 = mem16[input_0 + 10]
-        x_1_2 = mem16[input_0 + 12]
-        x_1_3 = mem16[input_0 + 14]
-        x_1_0 |= (x_1_0 << 16)
-        x_1_1 |= (x_1_1 << 16)
-        x_1_2 |= (x_1_2 << 16)
-        x_1_3 |= (x_1_3 << 16)
-        x_1_0 >>>= 1
-        x_1_1 >>>= 1
-        x_1_2 >>>= 1
-        x_1_3 >>>= 1
-        mem16[input_0 + 8] = x_1_0
-        mem16[input_0 + 10] = x_1_1
-        mem16[input_0 + 12] = x_1_2
-        mem16[input_0 + 14] = x_1_3
-
-        # x[2][0]
-        # x[2][1]
-        # x[2][2]
-        # x[2][3]
-        x_2_0 = mem16[input_0 + 16]
-        x_2_1 = mem16[input_0 + 18]
-        x_2_2 = mem16[input_0 + 20]
-        x_2_3 = mem16[input_0 + 22]
-        x_2_0 |= (x_2_0 << 16)
-        x_2_1 |= (x_2_1 << 16)
-        x_2_2 |= (x_2_2 << 16)
-        x_2_3 |= (x_2_3 << 16)
-        x_2_0 >>>= 8
-        x_2_1 >>>= 8
-        x_2_2 >>>= 8
-        x_2_3 >>>= 8
-        mem16[input_0 + 16] = x_2_0
-        mem16[input_0 + 18] = x_2_1
-        mem16[input_0 + 20] = x_2_2
-        mem16[input_0 + 22] = x_2_3
-
-        # x[3][0]
-        # x[3][1]
-        # x[3][2]
-        # x[3][3]
-        x_3_0 = mem16[input_0 + 24]
-        x_3_1 = mem16[input_0 + 26]
-        x_3_2 = mem16[input_0 + 28]
-        x_3_3 = mem16[input_0 + 30]
-        x_3_0 |= (x_3_0 << 16)
-        x_3_1 |= (x_3_1 << 16)
-        x_3_2 |= (x_3_2 << 16)
-        x_3_3 |= (x_3_3 << 16)
-        x_3_0 >>>= 9
-        x_3_1 >>>= 9
-        x_3_2 >>>= 9
-        x_3_3 >>>= 9
-        mem16[input_0 + 24] = x_3_0
-        mem16[input_0 + 26] = x_3_1
-        mem16[input_0 + 28] = x_3_2
-        mem16[input_0 + 30] = x_3_3
-
-    caller_r4 = mem32[input_0 + 52]
-    caller_r5 = mem32[input_0 + 56]
-    caller_r6 = mem32[input_0 + 60]
-    loadsp[input_0 + 64]
-# return
-
-# Proest functions in ARM11 assembly
-# Author: Thom Wiggers <thom@thomwiggers.nl>
-# vim: set ts=4 sw=4 tw=0 et :
 
 #enter ARM_ASM_AddConstant
-    mem32[input_0 + 52] = caller_r4
-    mem32[input_0 + 56] = caller_r5
-    mem32[input_0 + 60] = caller_r6
-    storesp[input_0 + 64]
     # input_0 => proest_ctx
     # input_1 => rounds
 
+    # FIXME extra rotate
     c1 = 0x75817581
     c2 = 0x658b658b # already rotated by 1
 
