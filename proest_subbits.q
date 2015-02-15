@@ -90,62 +90,59 @@ enter ARM_ASM_SubBits
     bits_7 ^= (x_4_5 unsigned>> 16)
 
     mem16[input_0 + 14] = bits_7
-
-    # load next stuff
-    x_0_1 = mem32[input_0 + 16]
-    x_2_3 = mem32[input_0 + 20]
-    x_4_5 = mem32[input_0 + 24]
-    x_6_7 = mem32[input_0 + 28]
-    #assign r2 r3 r4 r6 to x_0_1 x_2_3 x_4_5 x_6_7 = mem128[input_0]
-
-    # delayed saves to fill pipeline
-    mem16[input_0 + 10] = bits_5  # FIXME these spend 2 calc cycles!!!!
+    mem16[input_0 + 10] = bits_5
     mem16[input_0 + 12] = bits_6
 
+    # load next stuff
+    x_8_9 = mem32[input_0 + 16]
+    x_10_11 = mem32[input_0 + 20]
+    x_12_13 = mem32[input_0 + 24]
+    x_14_15 = mem32[input_0 + 28]
+    #assign r2 r3 r4 r6 to x_0_1 x_2_3 x_4_5 x_6_7 = mem128[input_0]
+
     # Third iteration
-    # FIXME don't reuse labels except qhasm borks
 
     # bits[8] = bits[2] ^ (p & q)
-    bits_8 = x_0_1 & (x_0_1 unsigned>> 16)
-    bits_8 ^= x_2_3
+    bits_8 = x_8_9 & (x_8_9 unsigned>> 16)
+    bits_8 ^= x_10_11
     mem16[input_0 + 16] = bits_8
 
     # bits[1] = bits[3] ^ (q & bits[2])
-    bits_9 = x_2_3 & (x_0_1 unsigned>> 16)
-    bits_9 ^= (x_2_3 unsigned>> 16)
+    bits_9 = x_10_11 & (x_8_9 unsigned>> 16)
+    bits_9 ^= (x_10_11 unsigned>> 16)
     mem16[input_0 + 18] = bits_9
 
     # bits[2] = p ^ (bits[0] & bits[1])
     bits_10 = bits_8 & bits_9
-    bits_10 ^= x_0_1
+    bits_10 ^= x_8_9
     mem16[input_0 + 20] = bits_10
 
     # bits[3] = q ^ (bits[1] & bits[2])
     bits_11 = bits_9 & bits_10
-    bits_11 ^= (x_0_1 unsigned>> 16)
+    bits_11 ^= (x_8_9 unsigned>> 16)
     mem16[input_0 + 22] = bits_11
 
     # Fourth iteration
 
     # bits[4] = bits[6] ^ (p & q)
-    bits_12 = x_4_5 & (x_4_5 unsigned>> 16)
-    bits_12 ^= x_6_7
+    bits_12 = x_12_13 & (x_12_13 unsigned>> 16)
+    bits_12 ^= x_14_15
     mem16[input_0 + 24] = bits_12
 
     # bits[5] = bits[7] ^ (q & bits[6])
     # y = bits[6]
-    bits_13 = x_6_7 & (x_4_5 unsigned>> 16)
-    bits_13 ^= (x_6_7 unsigned>> 16)
+    bits_13 = x_14_15 & (x_12_13 unsigned>> 16)
+    bits_13 ^= (x_14_15 unsigned>> 16)
     mem16[input_0 + 26] = bits_13
 
     # bits[6] = p ^ (bits[4] & bits[5])
     bits_14 = bits_12 & bits_13
-    bits_14 ^= x_4_5
+    bits_14 ^= x_12_13
     mem16[input_0 + 28] = bits_14
 
     # bits[7] = q ^ (bits[5] & bits[6])
     bits_15 = bits_13 & bits_14
-    bits_15 ^= (x_4_5 unsigned>> 16)
+    bits_15 ^= (x_12_13 unsigned>> 16)
     mem16[input_0 + 30] = bits_15
 
     caller_r4 = mem32[input_0 + 52]
