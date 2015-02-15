@@ -2,13 +2,6 @@
 # Author: Thom Wiggers <thom@thomwiggers.nl>
 # vim: set ts=4 sw=4 tw=0 et :
 
-stack32 caller_r1_stack
-stack32 caller_r2_stack
-stack32 caller_r3_stack
-stack32 caller_r4_stack
-stack32 caller_r5_stack
-stack32 caller_r6_stack
-
 int32 p
 int32 q
 int32 x
@@ -44,9 +37,10 @@ int32 bits_14
 int32 bits_15
 
 enter ARM_ASM_SubBits
-    caller_r4_stack = caller_r4
-    caller_r5_stack = caller_r5
-    caller_r6_stack = caller_r6
+    mem32[input_0 + 52] = caller_r4
+    mem32[input_0 + 56] = caller_r5
+    mem32[input_0 + 60] = caller_r6
+    storesp[input_0 + 64]
 
     # p = bits[0], q = bits[1]
     assign r1 r3 r4 r5 to x_0_1 x_2_3 x_4_5 x_6_7 = mem128[input_0]
@@ -147,7 +141,8 @@ enter ARM_ASM_SubBits
     bits_15 ^= (x_4_5 unsigned>> 16)
     mem16[input_0] = bits_15; input_0 += 2
 
-    caller_r4 = caller_r4_stack
-    caller_r5 = caller_r5_stack
-    caller_r6 = caller_r6_stack
+    caller_r4 = mem32[input_0 + 20] # 52
+    caller_r5 = mem32[input_0 + 24] # 56
+    caller_r6 = mem32[input_0 + 28] # 60
+    loadsp[input_0 + 32]
 return

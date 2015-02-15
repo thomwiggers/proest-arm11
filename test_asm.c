@@ -24,7 +24,7 @@
  * Generate a random proest_ctx
  */
 void randomize_proeststate(proest_ctx *x) {
-    for (unsigned int i = 0; i < 4; i++)
+    for (unsigned int i = 0; i < 8; i++)
         for (unsigned int j = 0; j < 4; j++)
             x->a[i][j] = (uint16_t) rand() & 0xffff;
 }
@@ -219,6 +219,7 @@ int test_mixcolumns() {
     return 1;
 }
 
+#ifdef TESTMINIMIX
 int test_minimixcolumns() {
     print_test_header("Checking MiniMixColumns");
     proest_ctx x, y;
@@ -239,6 +240,7 @@ int test_minimixcolumns() {
     // All done
     return 1;
 }
+#endif
 
 int test_proest_permute() {
     print_test_header("Checking proest permute");
@@ -283,7 +285,9 @@ int main(int argv, char* argc[]) {
     assert(test_addconstant());
     assert(test_shiftregisters());
     assert(test_mixcolumns());
+#ifdef TESTMINIMIX
     assert(test_minimixcolumns());
+#endif
     assert(test_proest_permute());
 
     return 0;

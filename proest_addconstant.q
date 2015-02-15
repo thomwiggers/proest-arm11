@@ -2,13 +2,6 @@
 # Author: Thom Wiggers <thom@thomwiggers.nl>
 # vim: set ts=4 sw=4 tw=0 et :
 
-stack32 caller_r1_stack
-stack32 caller_r2_stack
-stack32 caller_r3_stack
-stack32 caller_r4_stack
-stack32 caller_r5_stack
-stack32 caller_r6_stack
-# ...
 
 int32 x
 int32 y
@@ -18,10 +11,10 @@ int32 c1
 int32 c2
 
 enter ARM_ASM_AddConstant
-    caller_r4_stack = caller_r4
-    caller_r5_stack = caller_r5
-    caller_r6_stack = caller_r6
-
+    mem32[input_0 + 52] = caller_r4
+    mem32[input_0 + 56] = caller_r5
+    mem32[input_0 + 60] = caller_r6
+    storesp[input_0 + 64]
     # input_0 => proest_ctx
     # input_1 => rounds
 
@@ -44,7 +37,12 @@ enter ARM_ASM_AddConstant
     z -= input_1
 
     # preload data
-    assign r4 r5 r6 r12 to x_0_1 x_2_3 x_4_5 x_6_7 = mem128[input_0]
+    x_0_1 = mem32[input_0 + 0]
+    x_2_3 = mem32[input_0 + 4]
+    x_4_5 = mem32[input_0 + 8]
+    x_6_7 = mem32[input_0 + 12]
+
+    #assign r2 r3 r12 r14 to x_0_1 x_2_3 x_4_5 x_6_7 = mem128[input_0]
 
     # rotate c1, c2 left by input_0 = right by 32-input_0
     c1 >>>= z
@@ -113,9 +111,11 @@ enter ARM_ASM_AddConstant
     mem16[input_0] = y;       input_0 += 2
 
 
-    caller_r4 = caller_r4_stack
-    caller_r5 = caller_r5_stack
-    caller_r6 = caller_r6_stack
+    #input_0 -= 32
+    caller_r4 = mem32[input_0 + 20] # 52
+    caller_r5 = mem32[input_0 + 24] # 56
+    caller_r6 = mem32[input_0 + 28] # 60
+    loadsp[input_0 + 32]
 return
 
 

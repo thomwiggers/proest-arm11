@@ -2,32 +2,11 @@
 # Author: Thom Wiggers <thom@thomwiggers.nl>
 # vim: set ts=4 sw=4 tw=0 et :
 
-stack32 caller_r1_stack
-stack32 caller_r2_stack
-stack32 caller_r3_stack
-stack32 caller_r4_stack
-stack32 caller_r5_stack
-stack32 caller_r6_stack
-# ...
-
 enter ARM_ASM_MixColumns
-    caller_r4_stack = caller_r4
-    caller_r5_stack = caller_r5
-    caller_r6_stack = caller_r6
-
-    # Get enough stack space
-    stack32 newx_0
-    stack32 newx_1
-    stack32 newx_2
-    stack32 newx_3
-    stack32 newx_4
-    stack32 newx_5
-    stack32 newx_6
-    stack32 newx_7
-    stack32 newx_8
-    stack32 newx_9
-    stack32 newx_10
-    stack32 newx_11
+    mem32[input_0 + 52] = caller_r4
+    mem32[input_0 + 56] = caller_r5
+    mem32[input_0 + 60] = caller_r6
+    storesp[input_0 + 64]
 
     int32 x_0_1
     int32 x_2_3
@@ -56,7 +35,7 @@ enter ARM_ASM_MixColumns
     x ^= (x_14_15 unsigned>> 16)
 
     # Push x on stack as newx[0]
-    newx_0 = x
+    mem16[input_0 + 32] = x
 
     # newx[1] = x[1] + x[4] + x[11] + x[12] + x[15]
     x = (x_0_1 unsigned>> 16)
@@ -70,7 +49,8 @@ enter ARM_ASM_MixColumns
 
     x ^= x_12_13
     # push x on stack as newx[1]
-    newx_1 = x
+    mem16[input_0 + 34] = x
+    #newx_1 = x
 
     # newx[2] = x[2] + x[5] + x[8] + x[9] + x[12]
     x = x_12_13 ^ (x_4_5 unsigned>> 16)
@@ -79,7 +59,8 @@ enter ARM_ASM_MixColumns
     x ^= (x_8_9 unsigned>> 16)
 
     # push x on stack as newx[2]
-    newx_2 = x
+    mem16[input_0 + 36] = x
+    #newx_2 = x
 
     # newx[3] = x[3] + x[6] + x[9] + x[10] + x[13]
     x = (x_2_3 unsigned>> 16)
@@ -89,7 +70,8 @@ enter ARM_ASM_MixColumns
     x ^= x_10_11
 
     # push x on stack as newx[3]
-    newx_3 = x
+    mem16[input_0 + 38] = x
+    #newx_3 = x
 
     # newx[4] = x[0] + x[3] + x[4] + x[8] + x[10] + x[11] + x[14]
     x_0_1 = mem32[input_0 + 0]
@@ -102,7 +84,8 @@ enter ARM_ASM_MixColumns
     x ^= x_0_1
 
     # push x on stack as newx[4]
-    newx_4 = x
+    mem16[input_0 + 40] = x
+    #newx_4 = x
 
     # newx[5] = x[0] + x[5] + x[8] + x[11] + x[15]
     x = x_0_1
@@ -112,7 +95,8 @@ enter ARM_ASM_MixColumns
     x ^= (x_14_15 unsigned>> 16)
 
     # push x on stack as newx[5]
-    newx_5 = x
+    mem16[input_0 + 42] = x
+    #newx_5 = x
 
     # newx[6] = x[1] + x[6] + x[8] + x[12] + x[13]
     x_12_13 = mem32[input_0 + 24]
@@ -123,7 +107,8 @@ enter ARM_ASM_MixColumns
     x ^= (x_12_13 unsigned>> 16)
 
     # push x on stack as newx[6]
-    newx_6 = x
+    mem16[input_0 + 44] = x
+    #newx_6 = x
 
     # newx[7] = x[2] + x[7] + x[9] + x[13] + x[14]
     x_2_3 = mem32[input_0 + 4]
@@ -131,7 +116,7 @@ enter ARM_ASM_MixColumns
     x ^= (x_6_7 unsigned>> 16)
     x ^= (x_8_9 unsigned>> 16)
     x ^= x_2_3
-    newx_7 = x
+    mem16[input_0 + 46] = x  #newx_7
 
     # newx[8] = x[2] + x[4] + x[6] + x[7] + x[8] + x[12] + x[15]
     x = x_2_3 ^ x_4_5
@@ -142,7 +127,7 @@ enter ARM_ASM_MixColumns
     x ^= x_12_13
 
     # push x on stack as newx[8]
-    newx_8 = x
+    mem16[input_0 + 48] = x
 
     # newx[9] = x[3] + x[4] + x[7] + x[9] + x[12]
     x = x_4_5 ^ (x_2_3 unsigned>> 16)
@@ -151,7 +136,8 @@ enter ARM_ASM_MixColumns
     x ^= x_12_13
 
     # push x on stack as newx[9]
-    newx_9 = x
+    #newx_9 = x
+    mem16[input_0 + 50] = x
 
     # newx[10] = x[0] + x[1] + x[4] + x[10] + x[13]
     x_0_1 = mem32[input_0 + 0]
@@ -219,38 +205,39 @@ enter ARM_ASM_MixColumns
     # TODO work back and reduce these for not-reloaded ones
     # retrieve stuff from stack
     # newx[0]
-    x = newx_0
+    x = mem16[input_0 + 32]
     mem16[input_0 + 0] = x
 
     # newx[1]
-    x = newx_1
+    x = mem16[input_0 + 34]
     mem16[input_0 + 2] = x
 
-    x = newx_2
+    x = mem16[input_0 + 36]
     mem16[input_0 + 4] = x
 
-    x = newx_3
+    x = mem16[input_0 + 38]
     mem16[input_0 + 6] = x
 
-    x = newx_4
+    x = mem16[input_0 + 40]
     mem16[input_0 + 8] = x
 
-    x = newx_5
+    x = mem16[input_0 + 42]
     mem16[input_0 + 10] = x
 
-    x = newx_6
+    x = mem16[input_0 + 44]
     mem16[input_0 + 12] = x
 
-    x = newx_7
+    x = mem16[input_0 + 46]
     mem16[input_0 + 14] = x
 
-    x = newx_8
+    x = mem16[input_0 + 48]
     mem16[input_0 + 16] = x
 
-    x = newx_9
+    x = mem16[input_0 + 50]
     mem16[input_0 + 18] = x
 
-    caller_r4 = caller_r4_stack
-    caller_r5 = caller_r5_stack
-    caller_r6 = caller_r6_stack
+    caller_r4 = mem32[input_0 + 52]
+    caller_r5 = mem32[input_0 + 56]
+    caller_r6 = mem32[input_0 + 60]
+    loadsp[input_0 + 64]
 return

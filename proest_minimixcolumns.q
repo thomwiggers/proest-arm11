@@ -232,8 +232,6 @@ enter ARM_ASM_MiniMixColumns
     newx_8 = x
 
 
-
-
     x = newx_0
     mem16[input_0 + 0] = x
 

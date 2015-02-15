@@ -12,7 +12,7 @@
 typedef uint16_t lane;
 
 typedef struct {
-  lane a[4][4];
+  lane a[9][4];
 } proest_ctx;
 
 void proest_readstate(proest_ctx *r, const unsigned char in[PROEST_STATEBYTES]);
