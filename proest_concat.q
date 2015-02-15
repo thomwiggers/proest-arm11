@@ -50,11 +50,36 @@ int32 bits_13
 int32 bits_14
 int32 bits_15
 
+int32 newx0
+int32 newx1
+int32 newx2
+int32 newx3
+int32 newx4
+int32 newx5
+int32 newx6
+int32 newx7
+int32 newx8
+int32 newx9
+int32 newx10
+int32 newx11
+int32 newx12
+int32 newx13
+int32 newx14
+int32 newx15
+
+
 enter ARM_ASM_proest_rounds_two
     mem32[input_0 + 52] = caller_r4
     mem32[input_0 + 56] = caller_r5
     mem32[input_0 + 60] = caller_r6
-    storesp[input_0 + 64]
+    mem32[input_0 + 64] = caller_r7
+    mem32[input_0 + 68] = caller_r8
+    mem32[input_0 + 72] = caller_r9
+    mem32[input_0 + 76] = caller_r10
+    mem32[input_0 + 80] = caller_r11
+    mem32[input_0 + 84] = caller_r14
+    storesp[input_0 + 88]
+    mem16[input_0 + 92] = input_1
 
     # p = bits[0], q = bits[1]
     x_0_1 = mem32[input_0 + 0]
@@ -161,222 +186,181 @@ enter ARM_ASM_proest_rounds_two
 
 #enter ARM_ASM_MixColumns
 
-    # newx[0] = x[0] + x[4] + x[7] + x[10] + x[12] + x[14] + x[15]
     x_0_1 = mem32[input_0 + 0]
     x_4_5 = mem32[input_0 + 8]
     x_6_7 = mem32[input_0 + 12]
     x_10_11 = mem32[input_0 + 20]
     x_12_13 = mem32[input_0 + 24]
     x_14_15 = mem32[input_0 + 28]
-    x = x_0_1 ^ x_4_5
-    x ^= (x_6_7 unsigned>> 16)
-    x ^= x_10_11
-    x ^= x_12_13
-    x ^= x_14_15
-    x ^= (x_14_15 unsigned>> 16)
+    # newx[0] = x[0] + x[4] + x[7] + x[10] + x[12] + x[14] + x[15]
+    newx0 = bits_0 ^ bits_4
+    newx0 ^= (x_6_7 unsigned>> 16)
+    newx0 ^= x_10_11
+    newx0 ^= x_12_13
+    newx0 ^= x_14_15
+    newx0 ^= (x_14_15 unsigned>> 16)
 
     # Push x on stack as newx[0]
-    mem16[input_0 + 32] = x
+    mem16[input_0 + 32] = newx0
 
     # newx[1] = x[1] + x[4] + x[11] + x[12] + x[15]
-    x = (x_0_1 unsigned>> 16)
-    x ^= (x_14_15 unsigned>> 16)
-    x ^= x_4_5
-    x ^= (x_10_11 unsigned>> 16)
+    newx1 = x_4_5 ^ (x_0_1 unsigned>> 16)
+    newx1 ^= (x_14_15 unsigned>> 16)
+    newx1 ^= (x_10_11 unsigned>> 16)
 
     # intermezzo: load for next op
     x_2_3 = mem32[input_0 + 4]
     x_8_9 = mem32[input_0 + 16]
 
-    x ^= x_12_13
+    newx1 ^= x_12_13
     # push x on stack as newx[1]
-    mem16[input_0 + 34] = x
+    mem16[input_0 + 34] = newx1
     #newx_1 = x
 
     # newx[2] = x[2] + x[5] + x[8] + x[9] + x[12]
-    x = x_12_13 ^ (x_4_5 unsigned>> 16)
-    x ^= x_2_3
-    x ^= x_8_9
-    x ^= (x_8_9 unsigned>> 16)
+    newx2 = x_12_13 ^ (x_4_5 unsigned>> 16)
+    newx2 ^= x_2_3
+    newx2 ^= x_8_9
+    newx2 ^= (x_8_9 unsigned>> 16)
 
     # push x on stack as newx[2]
-    mem16[input_0 + 36] = x
+    mem16[input_0 + 36] = newx2
     #newx_2 = x
 
     # newx[3] = x[3] + x[6] + x[9] + x[10] + x[13]
-    x = (x_2_3 unsigned>> 16)
-    x ^= (x_8_9 unsigned>> 16)
-    x ^= x_6_7
-    x ^= (x_12_13 unsigned>> 16)
-    x ^= x_10_11
+    newx3 = (x_2_3 unsigned>> 16)
+    newx3 ^= (x_8_9 unsigned>> 16)
+    newx3 ^= x_6_7
+    newx3 ^= (x_12_13 unsigned>> 16)
+    newx3 ^= x_10_11
 
     # push x on stack as newx[3]
-    mem16[input_0 + 38] = x
+    mem16[input_0 + 38] = newx3
     #newx_3 = x
 
     # newx[4] = x[0] + x[3] + x[4] + x[8] + x[10] + x[11] + x[14]
-    x_0_1 = mem32[input_0 + 0]
-    x_14_15 = mem32[input_0 + 28]
-    x = x_10_11 ^ (x_2_3 unsigned>> 16)
-    x ^= x_4_5
-    x ^= x_8_9
-    x ^= (x_10_11 unsigned>> 16)
-    x ^= x_14_15
-    x ^= x_0_1
+    newx4 = x_10_11 ^ (x_2_3 unsigned>> 16)
+    newx4 ^= x_4_5
+    newx4 ^= x_8_9
+    newx4 ^= (x_10_11 unsigned>> 16)
+    newx4 ^= x_14_15
+    newx4 ^= x_0_1
 
     # push x on stack as newx[4]
-    mem16[input_0 + 40] = x
+    mem16[input_0 + 40] = newx4
     #newx_4 = x
 
     # newx[5] = x[0] + x[5] + x[8] + x[11] + x[15]
-    x = x_0_1
-    x ^= (x_10_11 unsigned>> 16)
-    x ^= x_8_9
-    x ^= (x_4_5 unsigned>> 16)
-    x ^= (x_14_15 unsigned>> 16)
+    newx5 = x_0_1 ^ (x_10_11 unsigned>> 16)
+    newx5 ^= x_8_9
+    newx5 ^= (x_4_5 unsigned>> 16)
+    newx5 ^= (x_14_15 unsigned>> 16)
 
     # push x on stack as newx[5]
-    mem16[input_0 + 42] = x
+    mem16[input_0 + 42] = newx5
     #newx_5 = x
 
     # newx[6] = x[1] + x[6] + x[8] + x[12] + x[13]
-    x_12_13 = mem32[input_0 + 24]
-    x = (x_0_1 unsigned>> 16)
-    x ^= x_8_9
-    x ^= x_6_7
-    x ^= x_12_13
-    x ^= (x_12_13 unsigned>> 16)
+    newx6 = x_8_9 ^ (x_0_1 unsigned>> 16)
+    newx6 ^= x_6_7
+    newx6 ^= x_12_13
+    newx6 ^= (x_12_13 unsigned>> 16)
 
     # push x on stack as newx[6]
-    mem16[input_0 + 44] = x
+    mem16[input_0 + 44] = newx6
     #newx_6 = x
 
     # newx[7] = x[2] + x[7] + x[9] + x[13] + x[14]
-    x_2_3 = mem32[input_0 + 4]
-    x = x_14_15 ^ (x_12_13 unsigned>> 16) # x[13]
-    x ^= (x_6_7 unsigned>> 16)
-    x ^= (x_8_9 unsigned>> 16)
-    x ^= x_2_3
-    mem16[input_0 + 46] = x  #newx_7
+    #x_2_3 = mem32[input_0 + 4]
+    newx7 = x_14_15 ^ (x_12_13 unsigned>> 16) # x[13]
+    newx7 ^= (x_6_7 unsigned>> 16)
+    newx7 ^= (x_8_9 unsigned>> 16)
+    newx7 ^= x_2_3
+    mem16[input_0 + 46] = newx7  #newx_7
 
     # newx[8] = x[2] + x[4] + x[6] + x[7] + x[8] + x[12] + x[15]
-    x = x_2_3 ^ x_4_5
-    x ^= x_6_7
-    x ^= (x_6_7 unsigned>> 16)
-    x ^= x_8_9
-    x ^= (x_14_15 unsigned>> 16)
-    x ^= x_12_13
+    newx8 = x_2_3 ^ x_4_5
+    newx8 ^= x_6_7
+    newx8 ^= (x_6_7 unsigned>> 16)
+    newx8 ^= x_8_9
+    newx8 ^= (x_14_15 unsigned>> 16)
+    newx8 ^= x_12_13
 
     # push x on stack as newx[8]
-    mem16[input_0 + 48] = x
+    mem16[input_0 + 48] = newx8
 
     # newx[9] = x[3] + x[4] + x[7] + x[9] + x[12]
-    x = x_4_5 ^ (x_2_3 unsigned>> 16)
-    x ^= (x_6_7 unsigned>> 16)
-    x ^= (x_8_9 unsigned>> 16)
-    x ^= x_12_13
+    newx9 = x_4_5 ^ (x_2_3 unsigned>> 16)
+    newx9 ^= (x_6_7 unsigned>> 16)
+    newx9 ^= (x_8_9 unsigned>> 16)
+    newx9 ^= x_12_13
 
     # push x on stack as newx[9]
     #newx_9 = x
-    mem16[input_0 + 50] = x
+    mem16[input_0 + 50] = newx9
 
     # newx[10] = x[0] + x[1] + x[4] + x[10] + x[13]
-    x_0_1 = mem32[input_0 + 0]
-    x_10_11 = mem32[input_0 + 20]
-    x = x_4_5 ^ (x_12_13 unsigned>> 16)
-    x ^= x_0_1
-    x ^= (x_0_1 unsigned>> 16)
-    x ^= x_10_11
+    #x_10_11 = mem32[input_0 + 20]
+    newx10 = x_4_5 ^ (x_12_13 unsigned>> 16)
+    newx10 ^= x_0_1
+    newx10 ^= (x_0_1 unsigned>> 16)
+    newx10 ^= x_10_11
 
     # Write back x to x[10]
-    mem16[input_0 + 20] = x
+    mem16[input_0 + 20] = newx10
 
     # newx[11] = x[1] + x[2] + x[5] + x[11] + x[14]
-    x = x_2_3 ^ (x_0_1 unsigned>> 16)
-    x ^= (x_4_5 unsigned>> 16)
-    x ^= (x_10_11 unsigned>> 16)
-    x ^= x_14_15
+    newx11 = x_2_3 ^ (x_0_1 unsigned>> 16)
+    newx11 ^= (x_4_5 unsigned>> 16)
+    newx11 ^= (x_10_11 unsigned>> 16)
+    newx11 ^= x_14_15
 
     # Write back x into x[11]
-    mem16[input_0 + 22] = x
+    mem16[input_0 + 22] = newx11
 
     # newx[12] = x[0] + x[2] + x[3] + x[6] + x[8] + x[11] + x[12]
-    x_6_7 = mem32[input_0 + 12]
-    x_8_9 = mem32[input_0 + 16]
-    x = x_0_1 ^ x_2_3
-    x ^= (x_2_3 unsigned>> 16)
-    x ^= (x_10_11 unsigned>> 16)
-    x ^= x_12_13
-    x ^= x_6_7
-    x ^= x_8_9
+    #x_6_7 = mem32[input_0 + 12]
+    #x_8_9 = mem32[input_0 + 16]
+    newx12 = x_0_1 ^ x_2_3
+    newx12 ^= (x_2_3 unsigned>> 16)
+    newx12 ^= (x_10_11 unsigned>> 16)
+    newx12 ^= x_12_13
+    newx12 ^= x_6_7
+    newx12 ^= x_8_9
 
     # write back into 12, we don't need it anymore
-    mem16[input_0 + 24] = x
+    mem16[input_0 + 24] = newx12
 
     # newx[13] = x[0] + x[3] + x[7] + x[8] + x[13]
-    x = x_0_1 ^ (x_2_3 unsigned>> 16)
-    x ^= (x_6_7 unsigned>> 16)
-    x ^= x_8_9
-    x ^= (x_12_13 unsigned>> 16)
+    newx13 = x_0_1 ^ (x_2_3 unsigned>> 16)
+    newx13 ^= (x_6_7 unsigned>> 16)
+    newx13 ^= x_8_9
+    newx13 ^= (x_12_13 unsigned>> 16)
 
     # write back into 13, we don't need it anymore
-    mem16[input_0 + 26] = x
+    mem16[input_0 + 26] = newx13
 
     # newx[14] = x[0] + x[4] + x[5] + x[9] + x[14]
-    x_4_5 = mem32[input_0 + 8]
-    x_14_15 = mem32[input_0 + 28]
-    x = x_0_1 ^ (x_8_9 unsigned>> 16)
-    x ^= x_4_5
-    x ^= (x_4_5 unsigned>> 16)
-    x ^= x_14_15
+    #x_4_5 = mem32[input_0 + 8]
+    #x_14_15 = mem32[input_0 + 28]
+    newx14 = x_0_1 ^ (x_8_9 unsigned>> 16)
+    newx14 ^= x_4_5
+    newx14 ^= (x_4_5 unsigned>> 16)
+    newx14 ^= x_14_15
 
     # write back into 14, we don't need it anymore
-    mem16[input_0 + 28] = x
+    mem16[input_0 + 28] = newx14
 
     # x[15] = x[1] + x[5] + x[6] + x[10] + x[15]
-    x = (x_0_1 unsigned>> 16)
-    x ^= (x_4_5 unsigned>> 16)
-    x ^= x_6_7
-    x ^= x_10_11
-    x ^= (x_14_15 unsigned>> 16)
+    newx15 = x_6_7 ^ (x_0_1 unsigned>> 16)
+    newx15 ^= (x_4_5 unsigned>> 16)
+    newx15 ^= x_10_11
+    newx15 ^= (x_14_15 unsigned>> 16)
 
     # write back into 15, we don't need it anymore.
-    mem16[input_0 + 30] = x
+    mem16[input_0 + 30] = newx15
 
-    # TODO work back and reduce these for not-reloaded ones
-    # retrieve stuff from stack
-    # newx[0]
-    x = mem16[input_0 + 32]
-    mem16[input_0 + 0] = x
-
-    # newx[1]
-    x = mem16[input_0 + 34]
-    mem16[input_0 + 2] = x
-
-    x = mem16[input_0 + 36]
-    mem16[input_0 + 4] = x
-
-    x = mem16[input_0 + 38]
-    mem16[input_0 + 6] = x
-
-    x = mem16[input_0 + 40]
-    mem16[input_0 + 8] = x
-
-    x = mem16[input_0 + 42]
-    mem16[input_0 + 10] = x
-
-    x = mem16[input_0 + 44]
-    mem16[input_0 + 12] = x
-
-    x = mem16[input_0 + 46]
-    mem16[input_0 + 14] = x
-
-    x = mem16[input_0 + 48]
-    mem16[input_0 + 16] = x
-
-    x = mem16[input_0 + 50]
-    mem16[input_0 + 18] = x
-
+    # stuff stored in other locations is retrieved later
 
 #enter ARM_ASM_ShiftRegisters
     #input_0: proest_ctx
@@ -386,10 +370,10 @@ enter ARM_ASM_proest_rounds_two
     # x[1][1]
     # x[1][2]
     # x[1][3]
-    x_1_0 = mem16[input_0 + 8]
-    x_1_1 = mem16[input_0 + 10]
-    x_1_2 = mem16[input_0 + 12]
-    x_1_3 = mem16[input_0 + 14]
+    x_1_0 = mem16[input_0 + 40] # == newx4
+    x_1_1 = mem16[input_0 + 42] # == newx5
+    x_1_2 = mem16[input_0 + 44] # == newx6
+    x_1_3 = mem16[input_0 + 46] # == newx7
     x_1_0 |= (x_1_0 << 16)
     x_1_1 |= (x_1_1 << 16)
     x_1_2 |= (x_1_2 << 16)
@@ -407,8 +391,8 @@ enter ARM_ASM_proest_rounds_two
     # x[2][1]
     # x[2][2]
     # x[2][3]
-    x_2_0 = mem16[input_0 + 16]
-    x_2_1 = mem16[input_0 + 18]
+    x_2_0 = mem16[input_0 + 48] # newx8
+    x_2_1 = mem16[input_0 + 50] # newx9
     x_2_2 = mem16[input_0 + 20]
     x_2_3 = mem16[input_0 + 22]
     x_2_0 |= (x_2_0 << 16)
@@ -457,8 +441,9 @@ enter ARM_ASM_proest_rounds_two
     # load initial data
 
     # preload data
-    x_0_1 = mem32[input_0 + 0]
-    x_2_3 = mem32[input_0 + 4]
+    input_1 = mem16[input_0 + 92]
+    x_0_1 = mem32[input_0 + 32]
+    x_2_3 = mem32[input_0 + 36]
     x_4_5 = mem32[input_0 + 8]
     x_6_7 = mem32[input_0 + 12]
 
@@ -934,6 +919,7 @@ enter ARM_ASM_proest_rounds_two
     # load initial data
 
     # preload data
+    input_1 = mem16[input_0 + 92]
     x_0_1 = mem32[input_0 + 0]
     x_2_3 = mem32[input_0 + 4]
     x_4_5 = mem32[input_0 + 8]
@@ -1014,7 +1000,13 @@ enter ARM_ASM_proest_rounds_two
     caller_r4 = mem32[input_0 + 52] # 52
     caller_r5 = mem32[input_0 + 56] # 56
     caller_r6 = mem32[input_0 + 60] # 60
-    loadsp[input_0 + 64]
+    caller_r7 = mem32[input_0 + 64]
+    caller_r8 = mem32[input_0 + 68]
+    caller_r9 = mem32[input_0 + 72]
+    caller_r10 = mem32[input_0 + 76]
+    caller_r11 = mem32[input_0 + 80]
+    caller_r14 = mem32[input_0 + 84]
+    loadsp[input_0 + 88]
 return
 
 
