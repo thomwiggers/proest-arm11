@@ -254,7 +254,7 @@ void proest_permute(proest_ctx *x)
 {
   int round;
 
-  for(round=0;round<PROEST_NROUNDS;round++)
+  for(round=32;round > PROEST_NROUNDS;--round)
   {
     ARM_ASM_SubBits(x);
     ARM_ASM_MixColumns(x);

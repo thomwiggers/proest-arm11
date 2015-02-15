@@ -32,10 +32,6 @@ enter ARM_ASM_AddConstant
 
     # load initial data
 
-    # FIXME check if following can't be done easier
-    z = 32
-    z -= input_1
-
     # preload data
     x_0_1 = mem32[input_0 + 0]
     x_2_3 = mem32[input_0 + 4]
@@ -44,78 +40,78 @@ enter ARM_ASM_AddConstant
 
     #assign r2 r3 r12 r14 to x_0_1 x_2_3 x_4_5 x_6_7 = mem128[input_0]
 
-    # rotate c1, c2 left by input_0 = right by 32-input_0
-    c1 >>>= z
-    c2 >>>= z
+    # rotate c1, c2 left by input supplied by c code = 32-#round
+    c1 >>>= input_1
+    c2 >>>= input_1
 
     # start adding constant
     y = c2 ^ (x_0_1 unsigned>> 16)
     x_0_1 ^= c1
     c2 >>>= 30
 
-    mem16[input_0] = x_0_1; input_0 += 2
-    mem16[input_0] = y;     input_0 += 2
+    mem16[input_0 + 0] = x_0_1
+    mem16[input_0 + 2] = y
 
     y = c2 ^ (x_2_3 unsigned>> 16)
     x_2_3 ^= (c1 >>> 30)
     c2 >>>= 30
 
-    mem16[input_0] = x_2_3; input_0 += 2
-    mem16[input_0] = y;     input_0 += 2
+    mem16[input_0 + 4] = x_2_3
+    mem16[input_0 + 6] = y
 
     y = c2 ^ (x_4_5 unsigned>> 16)
     x_4_5 ^= (c1 >>> 28)
     c2 >>>= 30
 
-    mem16[input_0] = x_4_5; input_0 += 2
-    mem16[input_0] = y;     input_0 +=2
+    mem16[input_0 + 8] = x_4_5
+    mem16[input_0 + 10] = y
 
     #x_6_7 = mem32[input_0]
     y = c2 ^ (x_6_7 unsigned>> 16)
     x_6_7 ^= (c1 >>> 26)
-
-    mem16[input_0] = x_6_7; input_0 += 4
-
-    assign r4 r5 r6 r12 to x_8_9 x_10_11 x_12_13 x_14_15 = mem128[input_0]
-
-    # FIXME get rid of latency (related to ^)
-    mem16[input_0 - 2] = y
     c2 >>>= 30
+
+    mem16[input_0 + 12] = x_6_7
+    mem16[input_0 + 14] = y
+
+    x_8_9 = mem32[input_0 + 16]
+    x_10_11 = mem32[input_0 + 20]
+    x_12_13 = mem32[input_0 + 24]
+    x_14_15 = mem32[input_0 + 28]
+    #assign r4 r5 r6 r12 to x_8_9 x_10_11 x_12_13 x_14_15 = mem128[input_0]
 
     y = c2 ^ (x_8_9 unsigned>> 16)
     x_8_9 ^= (c1 >>> 24)
     c2 >>>= 30
 
-    mem16[input_0] = x_8_9; input_0 += 2
-    mem16[input_0] = y;     input_0 += 2
+    mem16[input_0 + 16] = x_8_9
+    mem16[input_0 + 18] = y
 
     y = c2 ^ (x_10_11 unsigned>> 16)
     x_10_11 ^= (c1 >>> 22)
     c2 >>>= 30
 
-    mem16[input_0] = x_10_11; input_0 += 2
-    mem16[input_0] = y;     input_0 += 2
+    mem16[input_0 + 20] = x_10_11
+    mem16[input_0 + 22] = y
 
     y = c2 ^ (x_12_13 unsigned>> 16)
     x_12_13 ^= (c1 >>> 20)
     c2 >>>= 30
 
-    mem16[input_0] = x_12_13; input_0 += 2
-    mem16[input_0] = y;     input_0 += 2
+    mem16[input_0 + 24] = x_12_13
+    mem16[input_0 + 26] = y
 
     #x_14_15 = mem32[input_0]
     y = c2 ^ (x_14_15 unsigned>> 16)
     x_14_15 ^= (c1 >>> 18)
 
-    mem16[input_0] = x_14_15; input_0 += 2
-    mem16[input_0] = y;       input_0 += 2
+    mem16[input_0 + 28] = x_14_15
+    mem16[input_0 + 30] = y
 
-
-    #input_0 -= 32
-    caller_r4 = mem32[input_0 + 20] # 52
-    caller_r5 = mem32[input_0 + 24] # 56
-    caller_r6 = mem32[input_0 + 28] # 60
-    loadsp[input_0 + 32]
+    caller_r4 = mem32[input_0 + 52] # 52
+    caller_r5 = mem32[input_0 + 56] # 56
+    caller_r6 = mem32[input_0 + 60] # 60
+    loadsp[input_0 + 64]
 return
 
 

@@ -143,7 +143,7 @@ int test_addconstant() {
         randomize_proeststate(&x);
         copy_proeststate(&x, &y);
         AddConstant(&x, i);
-        ARM_ASM_AddConstant(&y, i);
+        ARM_ASM_AddConstant(&y, (32-i));
         if (test_proest_same(&x, &y))
             puts("OK");
         else return 0;
