@@ -7,7 +7,8 @@ QHASM = $(DISTCC) qhasm
 BUILDDIR = build
 MAQ = ../../../../maq/maq
 PROEST_ASM_OBJ := proest_mixcolumns.o proest_subbits.o \
-				  proest_addconstant.o proest_shiftregisters.o
+				  proest_addconstant.o proest_shiftregisters.o \
+				  proest_concat.o
 				 # proest_subbitsmixcolumns.o \
 				 # proest_minimixcolumns.o
 
