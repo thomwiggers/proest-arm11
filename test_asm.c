@@ -275,36 +275,6 @@ int test_proest_permute() {
     return 1;
 }
 
-int test_proest_unrolled() {
-    print_test_header("Checking unrolled proest");
-    proest_ctx x, y;
-    print_subtest("Checking if C == qhasm result");
-    for (int i = 0; i < TRAILS; i++) {
-        printf("\tRound %d... \t", i);
-        randomize_proeststate(&x);
-        copy_proeststate(&x, &y);
-
-        // apply all C-stages of proest to X
-        SubBits(&x);
-        MixColumns(&x);
-        ShiftRegisters(&x, 0);
-        AddConstant(&x, 0);
-        SubBits(&x);
-        MixColumns(&x);
-        ShiftRegisters(&x, 1);
-        AddConstant(&x, 1);
-
-        ARM_ASM_proest_rounds_two(&y, 32-0);
-        if (test_proest_same(&x, &y))
-            puts("OK");
-        else return 0;
-    }
-    print_test_footer();
-    return 1;
-}
-
-
-
 int main(int argv, char* argc[]) {
     srand(time(NULL));
     //srand(1);
@@ -319,7 +289,7 @@ int main(int argv, char* argc[]) {
     assert(test_minimixcolumns());
 #endif
     assert(test_proest_permute());
-    assert(test_proest_unrolled());
+    //assert(test_proest_unrolled());
 
     return 0;
 }

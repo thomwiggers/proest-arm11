@@ -2,7 +2,7 @@ DISTCC = distcc
 CC = $(DISTCC) cc
 AS = $(DISTCC) as
 ASFLAGS = --warn
-CFLAGS = -std=c99 -g -Wall -Wpedantic -O2
+CFLAGS = -std=c99 -g -Wall -Wpedantic -O3
 QHASM = $(DISTCC) qhasm
 BUILDDIR = build
 MAQ = ../../../../maq/maq

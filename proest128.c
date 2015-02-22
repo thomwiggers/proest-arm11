@@ -252,12 +252,7 @@ void proest_writestate(unsigned char out[PROEST_ROWS*PROEST_COLUMNS*PROEST_LANEB
 
 void proest_permute(proest_ctx *x)
 {
-  int round;
-
-  for(round=32;round > PROEST_NROUNDS;round-=2)
-  {
-    ARM_ASM_proest_rounds_two(x, round);
-  }
+  ARM_ASM_proest128_permute(x);
 }
 
 void proest_permute_C(proest_ctx *x)

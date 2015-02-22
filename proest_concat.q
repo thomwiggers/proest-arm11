@@ -9,6 +9,7 @@ int32 x_1_3
 int32 x_2_0
 int32 x_2_1
 int32 x_2_2
+int32 mx_2_3
 int32 x_3_0
 int32 x_3_1
 int32 x_3_2
@@ -67,8 +68,9 @@ int32 newx13
 int32 newx14
 int32 newx15
 
+int32 roundcounter
 
-enter ARM_ASM_proest_rounds_two
+enter ARM_ASM_proest128_permute
     mem32[input_0 + 52] = caller_r4
     mem32[input_0 + 56] = caller_r5
     mem32[input_0 + 60] = caller_r6
@@ -79,7 +81,11 @@ enter ARM_ASM_proest_rounds_two
     mem32[input_0 + 80] = caller_r11
     mem32[input_0 + 84] = caller_r14
     storesp[input_0 + 88]
-    mem16[input_0 + 92] = input_1
+    roundcounter = 32  # store round counter
+
+    proest_beginning:
+
+    mem16[input_0 + 92] = roundcounter
 
     # p = bits[0], q = bits[1]
     x_0_1 = mem32[input_0 + 0]
@@ -364,7 +370,7 @@ enter ARM_ASM_proest_rounds_two
 
 #enter ARM_ASM_ShiftRegisters
     #input_0: proest_ctx
-    #input_1: rounds
+    #roundcounter: rounds
 
     # x[1][0]
     # x[1][1]
@@ -382,10 +388,6 @@ enter ARM_ASM_proest_rounds_two
     x_1_1 >>>= 2
     x_1_2 >>>= 2
     x_1_3 >>>= 2
-    mem16[input_0 + 8] = x_1_0
-    mem16[input_0 + 10] = x_1_1
-    mem16[input_0 + 12] = x_1_2
-    mem16[input_0 + 14] = x_1_3
 
     # x[2][0]
     # x[2][1]
@@ -394,20 +396,15 @@ enter ARM_ASM_proest_rounds_two
     x_2_0 = mem16[input_0 + 48] # newx8
     x_2_1 = mem16[input_0 + 50] # newx9
     x_2_2 = mem16[input_0 + 20]
-    x_2_3 = mem16[input_0 + 22]
+    mx_2_3 = mem16[input_0 + 22]
     x_2_0 |= (x_2_0 << 16)
     x_2_1 |= (x_2_1 << 16)
     x_2_2 |= (x_2_2 << 16)
-    x_2_3 |= (x_2_3 << 16)
+    mx_2_3 |= (mx_2_3 << 16)
     x_2_0 >>>= 4
     x_2_1 >>>= 4
     x_2_2 >>>= 4
-    x_2_3 >>>= 4
-    mem16[input_0 + 16] = x_2_0
-    mem16[input_0 + 18] = x_2_1
-    mem16[input_0 + 20] = x_2_2
-    mem16[input_0 + 22] = x_2_3
-
+    mx_2_3 >>>= 4
 
     # x[3][0]
     # x[3][1]
@@ -430,10 +427,9 @@ enter ARM_ASM_proest_rounds_two
     mem16[input_0 + 28] = x_3_2
     mem16[input_0 + 30] = x_3_3
 
-
 #enter ARM_ASM_AddConstant
     # input_0 => proest_ctx
-    # input_1 => rounds
+    # roundcounter => rounds
 
     c1 = 0x75817581
     c2 = 0x658b658b # already rotated by 1
@@ -441,17 +437,15 @@ enter ARM_ASM_proest_rounds_two
     # load initial data
 
     # preload data
-    input_1 = mem16[input_0 + 92]
+    roundcounter = mem16[input_0 + 92]
     x_0_1 = mem32[input_0 + 32]
     x_2_3 = mem32[input_0 + 36]
-    x_4_5 = mem32[input_0 + 8]
-    x_6_7 = mem32[input_0 + 12]
 
     #assign r2 r3 r12 r14 to x_0_1 x_2_3 x_4_5 x_6_7 = mem128[input_0]
 
     # rotate c1, c2 left by input supplied by c code = 32-#round
-    c1 >>>= input_1
-    c2 >>>= input_1
+    c1 >>>= roundcounter
+    c2 >>>= roundcounter
 
     # start adding constant
     y = c2 ^ (x_0_1 unsigned>> 16)
@@ -463,49 +457,44 @@ enter ARM_ASM_proest_rounds_two
 
     y = c2 ^ (x_2_3 unsigned>> 16)
     x_2_3 ^= (c1 >>> 30)
-    c2 >>>= 30
 
     mem16[input_0 + 4] = x_2_3
     mem16[input_0 + 6] = y
 
-    y = c2 ^ (x_4_5 unsigned>> 16)
-    x_4_5 ^= (c1 >>> 28)
-    c2 >>>= 30
+    y = x_1_1 ^ (c2 >>> 30)
+    x_1_0 ^= (c1 >>> 28)
 
-    mem16[input_0 + 8] = x_4_5
+    mem16[input_0 + 8] = x_1_0
     mem16[input_0 + 10] = y
 
     #x_6_7 = mem32[input_0]
-    y = c2 ^ (x_6_7 unsigned>> 16)
-    x_6_7 ^= (c1 >>> 26)
-    c2 >>>= 30
+    y = x_1_3 ^ (c2 >>> 28)
+    x_1_2 ^= (c1 >>> 26)
 
-    mem16[input_0 + 12] = x_6_7
+    mem16[input_0 + 12] = x_1_2
     mem16[input_0 + 14] = y
 
-    x_8_9 = mem32[input_0 + 16]
-    x_10_11 = mem32[input_0 + 20]
+    #x_8_9 = mem32[input_0 + 16]
+    #x_10_11 = mem32[input_0 + 20]
     x_12_13 = mem32[input_0 + 24]
     x_14_15 = mem32[input_0 + 28]
     #assign r4 r5 r6 r12 to x_8_9 x_10_11 x_12_13 x_14_15 = mem128[input_0]
 
-    y = c2 ^ (x_8_9 unsigned>> 16)
-    x_8_9 ^= (c1 >>> 24)
-    c2 >>>= 30
+    y = x_2_1 ^ (c2 >>> 26)
+    x_2_0 ^= (c1 >>> 24)
 
-    mem16[input_0 + 16] = x_8_9
+    mem16[input_0 + 16] = x_2_0
     mem16[input_0 + 18] = y
 
-    y = c2 ^ (x_10_11 unsigned>> 16)
-    x_10_11 ^= (c1 >>> 22)
-    c2 >>>= 30
+    y = mx_2_3 ^ (c2 >>> 24)
+    x_2_2 ^= (c1 >>> 22)
 
-    mem16[input_0 + 20] = x_10_11
+    mem16[input_0 + 20] = x_2_2
     mem16[input_0 + 22] = y
 
-    y = c2 ^ (x_12_13 unsigned>> 16)
+    y = x_3_1 ^ (c2 >>> 22)
     x_12_13 ^= (c1 >>> 20)
-    c2 >>>= 30
+    c2 >>>= 20
 
     mem16[input_0 + 24] = x_12_13
     mem16[input_0 + 26] = y
@@ -807,7 +796,7 @@ enter ARM_ASM_proest_rounds_two
 
 #enter ARM_ASM_ShiftRegisters
     #input_0: proest_ctx
-    #input_1: rounds
+    #roundcounter: rounds
     # x[1][0]
     # x[1][1]
     # x[1][2]
@@ -824,10 +813,6 @@ enter ARM_ASM_proest_rounds_two
     x_1_1 >>>= 1
     x_1_2 >>>= 1
     x_1_3 >>>= 1
-    mem16[input_0 + 8] = x_1_0
-    mem16[input_0 + 10] = x_1_1
-    mem16[input_0 + 12] = x_1_2
-    mem16[input_0 + 14] = x_1_3
 
     # x[2][0]
     # x[2][1]
@@ -836,19 +821,15 @@ enter ARM_ASM_proest_rounds_two
     x_2_0 = mem16[input_0 + 48] # newx8
     x_2_1 = mem16[input_0 + 50] # newx9
     x_2_2 = mem16[input_0 + 20]
-    x_2_3 = mem16[input_0 + 22]
+    mx_2_3 = mem16[input_0 + 22]
     x_2_0 |= (x_2_0 << 16)
     x_2_1 |= (x_2_1 << 16)
     x_2_2 |= (x_2_2 << 16)
-    x_2_3 |= (x_2_3 << 16)
+    mx_2_3 |= (mx_2_3 << 16)
     x_2_0 >>>= 8
     x_2_1 >>>= 8
     x_2_2 >>>= 8
-    x_2_3 >>>= 8
-    mem16[input_0 + 16] = x_2_0
-    mem16[input_0 + 18] = x_2_1
-    mem16[input_0 + 20] = x_2_2
-    mem16[input_0 + 22] = x_2_3
+    mx_2_3 >>>= 8
 
     # x[3][0]
     # x[3][1]
@@ -874,28 +855,24 @@ enter ARM_ASM_proest_rounds_two
 
 #enter ARM_ASM_AddConstant
     # input_0 => proest_ctx
-    # input_1 => rounds
+    # roundcounter => rounds
 
-    # FIXME extra rotate
     c1 = 0x75817581
     c2 = 0x658b658b # already rotated by 1
 
     # load initial data
 
     # preload data
-    input_1 = mem16[input_0 + 92]
+    roundcounter = mem16[input_0 + 92]
     x_0_1 = mem32[input_0 + 32]
     x_2_3 = mem32[input_0 + 36]
-    x_4_5 = mem32[input_0 + 8]
-    x_6_7 = mem32[input_0 + 12]
 
     #assign r2 r3 r12 r14 to x_0_1 x_2_3 x_4_5 x_6_7 = mem128[input_0]
-    #
 
     # rotate c1, c2 left by input supplied by c code = 32-#round
-    input_1 -= 1
-    c1 >>>= input_1
-    c2 >>>= input_1
+    roundcounter -= 1
+    c1 >>>= roundcounter
+    c2 >>>= roundcounter
 
     # start adding constant
     y = c2 ^ (x_0_1 unsigned>> 16)
@@ -907,52 +884,48 @@ enter ARM_ASM_proest_rounds_two
 
     y = c2 ^ (x_2_3 unsigned>> 16)
     x_2_3 ^= (c1 >>> 30)
-    c2 >>>= 30
 
     mem16[input_0 + 4] = x_2_3
     mem16[input_0 + 6] = y
 
-    y = c2 ^ (x_4_5 unsigned>> 16)
-    x_4_5 ^= (c1 >>> 28)
-    c2 >>>= 30
+    y = x_1_1 ^ (c2 >>> 30)
+    x_1_0 ^= (c1 >>> 28)
 
-    mem16[input_0 + 8] = x_4_5
+    mem16[input_0 + 8] = x_1_0
     mem16[input_0 + 10] = y
 
     #x_6_7 = mem32[input_0]
-    y = c2 ^ (x_6_7 unsigned>> 16)
-    x_6_7 ^= (c1 >>> 26)
-    c2 >>>= 30
+    y = x_1_3 ^ (c2 >>> 28)
+    x_1_2 ^= (c1 >>> 26)
 
-    mem16[input_0 + 12] = x_6_7
+    mem16[input_0 + 12] = x_1_2
     mem16[input_0 + 14] = y
 
-    x_8_9 = mem32[input_0 + 16]
-    x_10_11 = mem32[input_0 + 20]
+    #x_8_9 = mem32[input_0 + 16]
+    #x_10_11 = mem32[input_0 + 20]
     x_12_13 = mem32[input_0 + 24]
     x_14_15 = mem32[input_0 + 28]
     #assign r4 r5 r6 r12 to x_8_9 x_10_11 x_12_13 x_14_15 = mem128[input_0]
 
-    y = c2 ^ (x_8_9 unsigned>> 16)
-    x_8_9 ^= (c1 >>> 24)
-    c2 >>>= 30
+    y = x_2_1 ^ (c2 >>> 26)
+    x_2_0 ^= (c1 >>> 24)
 
-    mem16[input_0 + 16] = x_8_9
+    mem16[input_0 + 16] = x_2_0
     mem16[input_0 + 18] = y
 
-    y = c2 ^ (x_10_11 unsigned>> 16)
-    x_10_11 ^= (c1 >>> 22)
-    c2 >>>= 30
+    y = mx_2_3 ^ (c2 >>> 24)
+    x_2_2 ^= (c1 >>> 22)
 
-    mem16[input_0 + 20] = x_10_11
+    mem16[input_0 + 20] = x_2_2
     mem16[input_0 + 22] = y
 
-    y = c2 ^ (x_12_13 unsigned>> 16)
+    y = x_3_1 ^ (c2 >>> 22)
     x_12_13 ^= (c1 >>> 20)
-    c2 >>>= 30
+    c2 >>>= 20
 
     mem16[input_0 + 24] = x_12_13
     mem16[input_0 + 26] = y
+    roundcounter = mem16[input_0 + 92]
 
     #x_14_15 = mem32[input_0]
     y = c2 ^ (x_14_15 unsigned>> 16)
@@ -960,6 +933,10 @@ enter ARM_ASM_proest_rounds_two
 
     mem16[input_0 + 28] = x_14_15
     mem16[input_0 + 30] = y
+
+    roundcounter -= 2
+    =? roundcounter - 16
+    goto proest_beginning if !=
 
     caller_r4 = mem32[input_0 + 52] # 52
     caller_r5 = mem32[input_0 + 56] # 56
