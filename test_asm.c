@@ -219,6 +219,7 @@ int test_mixcolumns() {
     return 1;
 }
 
+#define TESTMINIMIX
 #ifdef TESTMINIMIX
 int test_minimixcolumns() {
     print_test_header("Checking MiniMixColumns");

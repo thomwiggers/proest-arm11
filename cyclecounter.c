@@ -31,7 +31,6 @@ int main(int argv, char* argc[]) {
         cycles = cpucycles();
         proest_permute_C(&x);
         results[round] = cpucycles() - cycles;
-        //printf("Round %d: %llu cycles\n", round, results[round]);
     }
 
     printf("Sorting...\n");
@@ -49,7 +48,6 @@ int main(int argv, char* argc[]) {
         cycles = cpucycles();
         proest_permute(&x);
         results[round] = cpucycles() - cycles;
-        //printf("Round %d: %llu cycles\n", round, results[round]);
     }
 
     printf("Sorting...\n");
