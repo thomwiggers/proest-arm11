@@ -73,7 +73,6 @@ enter ARM_ASM_ShiftRegisters
         mem16[input_0 + 20] = x_2_2
         mem16[input_0 + 22] = x_2_3
  
-
         # x[3][0]
         # x[3][1]
         # x[3][2]

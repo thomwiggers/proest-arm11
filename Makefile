@@ -9,7 +9,7 @@ MAQ = ../../../../maq/maq
 PROEST_ASM_OBJ := proest_mixcolumns.o proest_subbits.o \
 				  proest_addconstant.o proest_shiftregisters.o \
 				  proest_concat.o \
-				  proest_minimixcolumns.o
+				  proest_minimixcolumns.o proest_unrolled.o
 				 # proest_subbitsmixcolumns.o \
 
 %.q: %.pq

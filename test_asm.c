@@ -17,7 +17,7 @@
     puts("--------------------------------------\n\n");
 #define print_subtest(X) puts("  -> " X );
 
-#define TRAILS 50
+#define TRAILS 5
 
 
 /**
@@ -276,6 +276,31 @@ int test_proest_permute() {
     return 1;
 }
 
+int test_proest_minipermute() {
+    print_test_header("Checking proest minipermute");
+    proest_ctx x, y;
+
+    print_subtest("Checking C == qhasm result");
+    for (int i = 0; i < TRAILS; i++) {
+        printf("\tRound %d... \t", i);
+        randomize_proeststate(&x);
+        copy_proeststate(&x, &y);
+        SubBits(&x);
+        MixColumns(&x);
+        ShiftRegisters(&x, 2);
+        AddConstant(&x, 2);
+        SubBits(&x);
+        ARM_ASM_proest_unrolled(&y);
+        if (test_proest_same(&x, &y))
+            puts("OK");
+        else return 0;
+    }
+
+    print_test_footer();
+    // All done
+    return 1;
+}
+
 int main(int argv, char* argc[]) {
     srand(time(NULL));
     //srand(1);
@@ -290,7 +315,7 @@ int main(int argv, char* argc[]) {
     assert(test_minimixcolumns());
 #endif
     assert(test_proest_permute());
-    //assert(test_proest_unrolled());
+//    assert(test_proest_minipermute());
 
     return 0;
 }

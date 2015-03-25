@@ -8,4 +8,5 @@ void ARM_ASM_MixColumns(proest_ctx *x);
 void ARM_ASM_MiniMixColumns(proest_ctx *x);
 void ARM_ASM_SubBits_MixColumns(proest_ctx *x);
 void ARM_ASM_proest128_permute(proest_ctx *x);
+void ARM_ASM_proest_unrolled(proest_ctx *x);
 #endif
