@@ -1,0 +1,116 @@
+    x_0_1 = mem32[input_0 + 0]
+    x_2_3 = mem32[input_0 + 4]
+    x_4_5 = mem32[input_0 + 8]
+    # mem96 TODO
+    x_14_15 = mem32[input_0 + 28]
+    x_8_9 = mem32[input_0 + 16]
+    t1 = x_0_1 ^ x_4_5
+    t3 = t1 ^ x_14_15
+    t5shifted = x_8_9 ^ x_4_5
+
+    x_10_11 = mem32[input_0 + 20]
+    x_12_13 = mem32[input_0 + 24]
+    y14 = t3 ^ (t5shifted unsigned>> 16)
+    mem16[input_0 + 34] = y14
+
+    t12 = x_10_11 ^ t3
+    t2 = x_12_13 ^ x_8_9
+    mem16[input_0 + 32] = t2
+    t4 = t2 ^ x_2_3
+
+    x_6_7 = mem32[input_0 + 12]
+
+    y2 = t4 ^ (t5shifted unsigned>> 16)
+    mem16[input_0 + 4] = y2
+
+    t10shifted = x_0_1 ^ x_10_11
+    t14 = x_6_7 ^ t4
+    t19 = x_4_5 ^ (t10shifted unsigned>> 16)
+    t11 = x_12_13 ^ (x_14_15 unsigned>> 16)
+    y1 = t19 ^ t11
+    mem16[input_0 + 48] = t11
+    mem16[input_0 + 2] = y1
+
+    t21 = t12 ^ (x_2_3 unsigned>> 16)
+    t13 = x_8_9 ^ (x_10_11 unsigned>> 16)
+
+    y4 = t13 ^ t21
+    mem16[input_0 + 36] = y4
+
+    t6shifted = x_0_1 ^ x_12_13
+    t22 = x_10_11 ^ (t6shifted unsigned>> 16)
+
+    y10 = t1 ^ t22
+    mem16[input_0 + 38] = y10
+
+    x_6_7 = mem32[input_0 + 12]
+
+    t9 = x_2_3 ^ x_14_15
+    t23 = t9 ^ (x_8_9 unsigned>> 16)
+    t8shifted = x_6_7 ^ x_12_13
+    mem32[input_0 + 44] = t8shifted # Use upper 4 bytes in input_0 + 46
+
+    y7 = t23 ^ (t8shifted unsigned>> 16)
+    mem16[input_0 + 14] = y7
+
+    t24 = t23 ^ (t10shifted unsigned>> 16)
+
+    x_4_5 = mem32[input_0 + 8] # hide latency
+
+    y11 = t24 ^ (t5shifted unsigned>> 16)
+
+    t25 = x_0_1 ^ t13
+    t15shifted = x_4_5 ^ x_14_15
+
+    mem16[input_0 + 40] = y11
+
+    y5 = t25 ^ (t15shifted unsigned>> 16)
+
+    t17shifted = x_2_3 ^ x_8_9
+
+    mem16[input_0 + 10] = y5
+
+    t26 = x_12_13 ^ (t17shifted unsigned>> 16)
+    t18 = x_4_5 ^ (x_6_7 unsigned>> 16)
+
+    y9 = t18 ^ t26
+    mem16[input_0 + 44] = t18
+    mem16[input_0 + 18] = y9
+
+    t2 = mem16[input_0 + 32]
+    x_10_11 = mem32[input_0 + 20]
+
+    t8_t11 = mem32[input_0 + 46]
+    t27 = t2 ^ t22
+    t16 = x_6_7 ^ x_10_11
+
+
+    t28shifted = t8_t11 ^ x_6_7
+    y6 = t16 ^ t27
+
+    y0 = t12 ^ (t28shifted unsigned>> 16)
+    mem16[input_0 + 0] = y0
+
+    t30 = x_8_9 ^ t8_t11
+
+    t7 = x_0_1 ^ (x_2_3 unsigned>> 16)
+
+    y13 = t7 ^ t30
+
+    t31shifted = t17shifted ^ x_12_13
+
+    y3 = t16 ^ (t31shifted unsigned>> 16)
+    mem16[input_0 + 6] = y3
+
+    t32 = t16 ^ (x_0_1 unsigned>> 16)
+
+    y15 = t32 ^ (t15shifted unsigned>> 16)
+    t18 = mem16[input_0 + 44]
+
+    t33 = t14 ^ (x_14_15 unsigned>> 16)
+
+    y8 = t18 ^ t33
+
+    t34 = t14 ^ (x_10_11 unsigned>> 16)
+
+    y12 = t34 ^ t7

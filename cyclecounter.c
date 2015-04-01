@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "dev4ns.h"
 #include "proest128.h"
+#include "proestasm.h"
 
 const unsigned long long N_ROUNDS = 1000000;
 
@@ -46,7 +47,24 @@ int main(int argv, char* argc[]) {
     for (unsigned long long round = 0; round < N_ROUNDS; round++) {
         randomize_proeststate(&x);
         cycles = cpucycles();
-        proest_permute(&x);
+        ARM_ASM_proest128_permute(&x);
+        results[round] = cpucycles() - cycles;
+    }
+
+    printf("Sorting...\n");
+    qsort(results, N_ROUNDS, sizeof(unsigned long long), compare);
+
+    puts("Statistics:");
+    printf("\tMinimum amount of cycles: %llu\n", results[0]);
+    printf("\tMaximum amount of cycles: %llu\n", results[N_ROUNDS-1]);
+    printf("\tMedian  amount of cycles: %llu\n", results[N_ROUNDS/2]);
+
+    puts("\nMeasuring ASM minimixcolumns implementation");
+    printf("Measuring %llu rounds\n", N_ROUNDS);
+    for (unsigned long long round = 0; round < N_ROUNDS; round++) {
+        randomize_proeststate(&x);
+        cycles = cpucycles();
+        ARM_ASM_proest_unrolled(&x);
         results[round] = cpucycles() - cycles;
     }
 

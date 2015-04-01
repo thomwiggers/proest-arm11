@@ -12,20 +12,20 @@ PROEST_ASM_OBJ := proest_mixcolumns.o proest_subbits.o \
 				  proest_minimixcolumns.o proest_unrolled.o
 				 # proest_subbitsmixcolumns.o \
 
-%.q: %.pq
-	$(MAQ) $^ > $@
+%.q: %.pq *.iq
+	./simplemacro.py $< > $@
 
 .PRECIOUS: %.s
 %.s: %.q
 	@mkdir -p $(BUILDDIR)
-	cp $^ $(BUILDDIR)/$^.c
-	$(QHASM) -c $(BUILDDIR)/$^.c -o $@
+	cp $< $(BUILDDIR)/$<.c
+	$(QHASM) -c $(BUILDDIR)/$<.c -o $@
 
 %.o: %.c
-	$(CC) -c $(CFLAGS) $^ -o $@
+	$(CC) -c $(CFLAGS) $< -o $@
 
 %.o: %.s
-	$(AS) $(ASFLAGS) $^ -o $@
+	$(AS) $(ASFLAGS) $< -o $@
 
 test_asm: test_asm.o proest128.o $(PROEST_ASM_OBJ)
 	$(CC) $(CFLAGS) $^ -o $@
@@ -43,5 +43,5 @@ gdb: test_asm
 
 .PHONY: clean
 clean:
-	-rm -f *.s *.o test_asm cyclecounter
+	-rm -f *.s *.o test_asm cyclecounter proest_unrolled.q
 	-rm -fr $(BUILDDIR)

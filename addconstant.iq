@@ -1,0 +1,52 @@
+    # start adding constant
+    y = c2 ^ (x_0_1 unsigned>> 16)
+    x_0_1 ^= c1
+    c2 >>>= 30
+
+    mem16[input_0 + 0] = x_0_1
+    mem16[input_0 + 2] = y
+
+    y = c2 ^ (x_2_3 unsigned>> 16)
+    x_2_3 ^= (c1 >>> 30)
+
+    mem16[input_0 + 4] = x_2_3
+    mem16[input_0 + 6] = y
+
+    y = x_1_1 ^ (c2 >>> 30)
+    x_1_0 ^= (c1 >>> 28)
+
+    mem16[input_0 + 8] = x_1_0
+    mem16[input_0 + 10] = y
+
+    y = x_1_3 ^ (c2 >>> 28)
+    x = x_1_2 ^ (c1 >>> 26)
+
+    mem16[input_0 + 12] = x
+    mem16[input_0 + 14] = y
+
+    x_12_13 = mem32[input_0 + 24]
+    x_14_15 = mem32[input_0 + 28]
+    # FIXME do a 64 bit load TODO
+
+    y = x_2_1 ^ (c2 >>> 26)
+    x = x_2_0 ^ (c1 >>> 24)
+
+    mem16[input_0 + 16] = x
+    mem16[input_0 + 18] = y
+
+    y = mx_2_3 ^ (c2 >>> 24)
+    x = x_2_2 ^ (c1 >>> 22)
+
+    mem16[input_0 + 20] = x
+    mem16[input_0 + 22] = y
+
+
+    y = x_3_1 ^ (c2 >>> 22)
+    x = x_12_13 ^ (c1 >>> 20)
+
+    c2 >>>= 20
+    mem16[input_0 + 24] = x
+    mem16[input_0 + 26] = y
+
+    y = c2 ^ (x_14_15 unsigned>> 16)
+    x_14_15 ^= (c1 >>> 18)
