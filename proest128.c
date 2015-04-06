@@ -1,3 +1,8 @@
+/*
+ * Placed into the Public Domain by the Proest authors.
+ *
+ * Minor modifications by Thom Wiggers
+ */
 #include "proest128.h"
 #include "proestasm.h"
 

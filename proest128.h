@@ -1,3 +1,9 @@
+/**
+ * Placed into the Public Domain by the Proest authors
+ *
+ * Minor modifications by Thom Wiggers
+ */
+
 #ifndef PROEST128_H
 #define PROEST128_H
 

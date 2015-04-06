@@ -1,3 +1,8 @@
+/*
+cpucycles dev4ns.h version 20100803
+D. J. Bernstein
+Public domain.
+*/
 #include <sys/types.h>
 #include <fcntl.h>
 #include <time.h>
