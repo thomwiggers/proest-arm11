@@ -30,7 +30,7 @@ PROEST_ASM_OBJ := proest_mixcolumns.o proest_subbits.o \
 test_asm: test_asm.o proest128.o $(PROEST_ASM_OBJ)
 	$(CC) $(CFLAGS) $^ -o $@
 
-cyclecounter: cyclecounter.o dev4ns.o proest128.o $(PROEST_ASM_OBJ)
+cyclecounter: cyclecounter.o dev4ns.o proest128.o $(PROEST_ASM_OBJ) qhasm_emptyfunction.o
 	$(CC) $(CFLAGS) $^ -o $@
 
 .PHONY: run

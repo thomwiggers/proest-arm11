@@ -48,5 +48,4 @@
     mem16[input_0 + 24] = x
     mem16[input_0 + 26] = y
 
-    y = c2 ^ (x_14_15 unsigned>> 16)
-    x_14_15 ^= (c1 >>> 18)
+    # last part is external to hide latencies

@@ -3,3 +3,4 @@ build/
 *.s
 test_asm
 cyclecounter
+proest_unrolled.q

@@ -98,7 +98,6 @@ enter ARM_ASM_MiniMixColumns
     t2 = x_12_13 ^ x_8_9
     mem16[input_0 + 32] = t2
     t4 = t2 ^ x_2_3
-    t9 = x_2_3 ^ x_14_15
 
     x_6_7 = mem32[input_0 + 12]
 
@@ -117,9 +116,9 @@ enter ARM_ASM_MiniMixColumns
     t13 = x_8_9 ^ (x_10_11 unsigned>> 16)
 
     y4 = t13 ^ t21
+    t6shifted = x_0_1 ^ x_12_13
     mem16[input_0 + 36] = y4
 
-    t6shifted = x_0_1 ^ x_12_13
     t22 = x_10_11 ^ (t6shifted unsigned>> 16)
 
     y10 = t1 ^ t22
@@ -140,13 +139,13 @@ enter ARM_ASM_MiniMixColumns
     mem16[input_0 + 40] = y11
 
     t25 = x_0_1 ^ t13
-    x_4_5 = mem32[input_0 + 8]
     t15shifted = x_4_5 ^ x_14_15
+    x_4_5 = mem32[input_0 + 8]
 
     y5 = t25 ^ (t15shifted unsigned>> 16)
+    t17shifted = x_2_3 ^ x_8_9
     mem16[input_0 + 10] = y5
 
-    t17shifted = x_2_3 ^ x_8_9
     t26 = x_12_13 ^ (t17shifted unsigned>> 16)
     t18 = x_4_5 ^ (x_6_7 unsigned>> 16)
 
@@ -176,9 +175,9 @@ enter ARM_ASM_MiniMixColumns
     t7 = x_0_1 ^ (x_2_3 unsigned>> 16)
 
     y13 = t7 ^ t30
+    t31shifted = t17shifted ^ x_12_13
     mem16[input_0 + 26] = y13
 
-    t31shifted = t17shifted ^ x_12_13
 
     y3 = t16 ^ (t31shifted unsigned>> 16)
     mem16[input_0 + 6] = y3

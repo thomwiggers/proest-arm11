@@ -1,15 +1,17 @@
-    x_0_1 = mem32[input_0 + 0]
-    x_2_3 = mem32[input_0 + 4]
-    x_4_5 = mem32[input_0 + 8]
+    #x_0_1 = mem32[input_0 + 0]
+    #x_2_3 = mem32[input_0 + 4]
+    #x_4_5 = mem32[input_0 + 8]
     # mem96 TODO
-    x_14_15 = mem32[input_0 + 28]
-    x_8_9 = mem32[input_0 + 16]
+    assign r6 r7 to x_8_9 x_10_11 = mem64[input_0 + 16]
+    #x_8_9 = mem32[input_0 + 16]
+    #x_10_11 = mem32[input_0 + 20]
+    assign r4 r5 to x_12_13 x_14_15 = mem64[input_0 + 24]
+    #x_12_13 = mem32[input_0 + 24]
+    #x_14_15 = mem32[input_0 + 28]
     t1 = x_0_1 ^ x_4_5
-    t3 = t1 ^ x_14_15
+    t3 = t1 ^ bits_14
     t5shifted = x_8_9 ^ x_4_5
 
-    x_10_11 = mem32[input_0 + 20]
-    x_12_13 = mem32[input_0 + 24]
     y14 = t3 ^ (t5shifted unsigned>> 16)
     mem16[input_0 + 34] = y14
 
